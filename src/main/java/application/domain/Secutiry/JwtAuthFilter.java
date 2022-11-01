@@ -1,5 +1,6 @@
 package application.domain.Secutiry;
 
+import application.domain.services.UserService;
 import lombok.AllArgsConstructor;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -13,9 +14,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-@AllArgsConstructor
 import org.springframework.web.filter.OncePerRequestFilter;
 
+@AllArgsConstructor
 public class JwtAuthFilter extends OncePerRequestFilter {
 
     private JwtService service;
