@@ -1,5 +1,7 @@
 package application.domain.entities;
 
+import application.domain.enumeration.PrioridadeEnum;
+import application.domain.enumeration.StatusTarefa;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.AllArgsConstructor;
 import lombok.Data;
