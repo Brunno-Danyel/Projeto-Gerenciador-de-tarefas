@@ -1,5 +1,6 @@
 package application.domain.services;
 
+import application.domain.dto.UsuarioDTO;
 import application.domain.entities.Usuario;
 import application.domain.exception.SenhaInvalidaException;
 import application.domain.exception.UsuarioException;
@@ -50,7 +51,8 @@ public class UserService implements UserDetailsService {
     }
 
     @Transactional
-    public Usuario save(Usuario usuario){
-        return repository.save(usuario);
+    public Usuario save(UsuarioDTO usuario){
+        Usuario user = usuario.fromDto(usuario);
+        return repository.save(user);
     }
 }
