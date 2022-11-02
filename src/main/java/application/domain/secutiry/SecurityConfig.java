@@ -1,4 +1,4 @@
-package application.domain.Secutiry;
+package application.domain.secutiry;
 
 import application.domain.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -50,6 +50,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .anyRequest().authenticated().and()
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and().addFilterBefore(jwtFilter(), UsernamePasswordAuthenticationFilter.class);
+        ;
     }
 
     @Override

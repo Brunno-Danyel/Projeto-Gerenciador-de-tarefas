@@ -1,6 +1,6 @@
 package application.domain.controller;
 
-import application.domain.Secutiry.JwtService;
+import application.domain.secutiry.JwtService;
 import application.domain.dto.CredenciaisDTO;
 import application.domain.dto.TokenDTO;
 import application.domain.dto.UsuarioDTO;
@@ -34,6 +34,7 @@ public class UsuarioController {
         return service.save(usuario);
     }
 
+    @PostMapping("/auth")
     public TokenDTO autenticar(@RequestBody CredenciaisDTO dto) {
         try {
             Usuario usuario = Usuario.builder().login(dto.getLogin()).senha(dto.getSenha()).build();

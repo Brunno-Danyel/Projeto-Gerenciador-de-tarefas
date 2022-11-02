@@ -33,6 +33,7 @@ public class TarefaService {
 
         Tarefa tarefa = tarefaDto.fromDto(tarefaDto);
         tarefa.setResponsavel(usuario);
+        tarefa.setDeadline(OffsetDateTime.now());
         tarefa.setStatus(StatusTarefa.EM_ANDAMENTO);
         return repository.save(tarefa);
     }

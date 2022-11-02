@@ -1,4 +1,4 @@
-package application.domain.Secutiry;
+package application.domain.secutiry;
 
 import application.domain.services.UserService;
 import lombok.AllArgsConstructor;
@@ -13,8 +13,6 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-
-import org.springframework.web.filter.OncePerRequestFilter;
 
 @AllArgsConstructor
 public class JwtAuthFilter extends OncePerRequestFilter {

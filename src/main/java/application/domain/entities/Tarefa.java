@@ -34,7 +34,6 @@ public class Tarefa {
 
     @Column(name = "tb_prioridade_tarefa")
     @JsonFormat(shape = JsonFormat.Shape.STRING)
-    @Enumerated(EnumType.STRING)
     private PrioridadeEnum prioridade;
 
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss'Z'", timezone = "GMT")
