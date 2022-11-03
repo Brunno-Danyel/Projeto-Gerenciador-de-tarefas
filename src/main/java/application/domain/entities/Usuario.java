@@ -7,6 +7,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import javax.validation.constraints.Email;
 import javax.validation.constraints.NotEmpty;
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -24,6 +25,7 @@ public class Usuario implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Email(message = "Digite um email de login válido")
     @NotEmpty(message = "${campo.login.obrigatorio}")
     private String login;
 
