@@ -42,10 +42,14 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.csrf().disable().authorizeRequests()
-                .antMatchers("/tarefas/**").hasRole("ADMIN")
-                .antMatchers(HttpMethod.POST, "/tarefas").hasAnyRole("ADMIN", "USER")
-                .antMatchers("id/{tarefaId}").hasAnyRole("USER", "ADMIN")
-                .antMatchers("/{tarefaId}/concluir").hasAnyRole("ADMIN", "USER")
+                .antMatchers(HttpMethod.POST,"/tarefas").hasAnyRole("ADMIN", "USER")
+                .antMatchers(HttpMethod.GET, "/listar").hasRole("ADMIN")
+                .antMatchers(HttpMethod.GET, "id/{tarefaId}").hasAnyRole("ADMIN", "USER")
+                .antMatchers(HttpMethod.GET, "descricao/{descricao}").hasAnyRole("ADMIN", "USER")
+                .antMatchers(HttpMethod.GET, "status/{status}").hasRole("ADMIN")
+                .antMatchers(HttpMethod.DELETE,"/{tarefaId}").hasRole("ADMIN")
+                .antMatchers(HttpMethod.PUT, "/{tarefaId}").hasAnyRole("ADMIN", "USER")
+                .antMatchers(HttpMethod.PUT, "/{tarefaId}/concluir").hasAnyRole("ADMIN", "USER")
                 .antMatchers(HttpMethod.POST, "/usuarios/**").permitAll()
                 .anyRequest().authenticated().and()
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
