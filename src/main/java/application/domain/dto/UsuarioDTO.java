@@ -12,6 +12,7 @@ public class UsuarioDTO {
 
     private Long id;
     private String login;
+    private String nome;
     private String senha;
     private boolean admin;
 
@@ -19,6 +20,7 @@ public class UsuarioDTO {
         Usuario usuario = new Usuario();
         usuario.setId(dto.getId());
         usuario.setLogin(dto.getLogin());
+        usuario.setNome(dto.getNome());
         usuario.setSenha(dto.getSenha());
         usuario.setAdmin(dto.isAdmin());
 

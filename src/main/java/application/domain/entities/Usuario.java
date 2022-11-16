@@ -25,12 +25,17 @@ public class Usuario implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Email(message = "Digite um email de login válido")
+    @Email(message = "${campo.login.valido}")
     @NotEmpty(message = "${campo.login.obrigatorio}")
+    @Column(name = "tb_login_usuario")
     private String login;
+
+    @Column(name = "tb_nome_usuario")
+    private String nome;
 
     @NotEmpty(message = "${campo.senha.obrigatorio}")
     @JsonIgnore
+    @Column(name = "tb_senha_user")
     private String senha;
 
     @JsonIgnore
