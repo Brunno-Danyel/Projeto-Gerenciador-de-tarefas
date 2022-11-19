@@ -5,6 +5,7 @@ import application.domain.enumeration.PrioridadeEnum;
 import lombok.Getter;
 import lombok.Setter;
 
+import javax.validation.constraints.NotEmpty;
 import java.time.OffsetDateTime;
 
 
@@ -14,10 +15,12 @@ public class TarefaDTO {
 
     private Long id;
 
+    @NotEmpty(message = "{campo.titulo.obrigatorio}")
     private String titulo;
 
+    @NotEmpty(message = "{campo.descricao.obirgatorio}")
     private String descricao;
-
+    
     private Long idUsuario;
 
     private PrioridadeEnum prioridade;
