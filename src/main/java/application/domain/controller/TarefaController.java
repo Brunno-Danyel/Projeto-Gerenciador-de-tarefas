@@ -30,7 +30,7 @@ public class TarefaController {
 
     @PostMapping("/tarefa")
     @ResponseStatus(HttpStatus.CREATED)
-    public Tarefa createdTask(@RequestBody @Valid TarefaDTO tarefaDto) {
+    public Tarefa createdTask(@RequestBody @Valid TarefaDTO tarefaDto)  {
         return service.createdTask(tarefaDto);
     }
 

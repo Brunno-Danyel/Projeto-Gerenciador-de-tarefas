@@ -6,6 +6,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 import java.time.OffsetDateTime;
 
 
@@ -20,9 +21,11 @@ public class TarefaDTO {
 
     @NotEmpty(message = "{campo.descricao.obirgatorio}")
     private String descricao;
-    
+
+    @NotNull(message = "{campo.responsavel.obrigatorio}")
     private Long idUsuario;
 
+    @NotNull(message = "{campo.prioridade.obrigatorio}")
     private PrioridadeEnum prioridade;
 
     private OffsetDateTime deadline;

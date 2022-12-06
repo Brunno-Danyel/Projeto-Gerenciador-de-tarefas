@@ -14,6 +14,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 @Service
 public class UserService implements UserDetailsService {
     @Autowired
@@ -25,7 +27,7 @@ public class UserService implements UserDetailsService {
     public UserDetails autenticar(Usuario usuario) {
         UserDetails user = loadUserByUsername(usuario.getLogin());
         boolean senhasBatem = passwordEncoder.matches(usuario.getSenha(), user.getPassword());
-        if (senhasBatem){
+        if (senhasBatem) {
             return user;
         }
         throw new SenhaInvalidaException();
@@ -51,8 +53,14 @@ public class UserService implements UserDetailsService {
     }
 
     @Transactional
-    public Usuario save(UsuarioDTO usuario){
+    public Usuario save(UsuarioDTO usuario) {
         Usuario user = usuario.fromDto(usuario);
         return repository.save(user);
     }
+
+    public List<Usuario> listUser() {
+        List users = repository.findAll();
+        return users;
+    }
+
 }

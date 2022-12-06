@@ -9,6 +9,7 @@ import application.domain.exception.SenhaInvalidaException;
 import application.domain.services.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -16,6 +17,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
 import javax.validation.Valid;
+import java.util.List;
 
 @RequiredArgsConstructor
 @RestController
@@ -45,15 +47,15 @@ public class UsuarioController {
         } catch (UsernameNotFoundException | SenhaInvalidaException e) {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, e.getMessage());
         }
+    }
 
+    @GetMapping
+    public ResponseEntity<List<Usuario>> listUser(){
+        List<Usuario> listUser = service.listUser();
+        return ResponseEntity.ok().body(listUser);
+    }
 
-	/*@GetMapping
-	public ResponseEntity<List<Usuario>> listUser(){
-		List<Usuario> listUser = service.listUser();
-		return ResponseEntity.ok().body(listUser);
-	}
-
-	@GetMapping("/{usuarioId}")
+	/*@GetMapping("/{usuarioId}")
 	public ResponseEntity<Usuario> findByNumber(@PathVariable Long usuarioId) {
 		Usuario user = service.findById(usuarioId);
 		return ResponseEntity.ok().body(user);
@@ -65,4 +67,4 @@ public class UsuarioController {
 		return ResponseEntity.ok().body(user);
 	}*/
     }
-}
+

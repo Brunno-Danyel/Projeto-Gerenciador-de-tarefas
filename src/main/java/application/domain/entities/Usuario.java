@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 
 import javax.persistence.*;
 import javax.validation.constraints.Email;
@@ -25,15 +26,13 @@ public class Usuario implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Email(message = "${campo.login.valido}")
-    @NotEmpty(message = "${campo.login.obrigatorio}")
+    @Email
     @Column(name = "tb_login_usuario")
     private String login;
 
     @Column(name = "tb_nome_usuario")
     private String nome;
 
-    @NotEmpty(message = "${campo.senha.obrigatorio}")
     @JsonIgnore
     @Column(name = "tb_senha_user")
     private String senha;

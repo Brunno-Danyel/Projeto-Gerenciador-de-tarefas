@@ -3,10 +3,10 @@ package application.domain.services;
 import application.domain.dto.TarefaDTO;
 import application.domain.entities.Tarefa;
 import application.domain.entities.Usuario;
+import application.domain.enumeration.PrioridadeEnum;
 import application.domain.enumeration.StatusTarefa;
 import application.domain.exception.ResourceNotFoundException;
 import application.domain.exception.TarefaException;
-import application.domain.exception.UsuarioException;
 import application.domain.repositories.TarefaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 import javax.persistence.EntityNotFoundException;
 import java.time.OffsetDateTime;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class TarefaService {
@@ -69,7 +70,7 @@ public class TarefaService {
     }
 
     public List<Tarefa> searchStatus(String status) {
-        return repository.findByStatus(status);
+        return repository.status(status);
     }
 
     private void updateData(Tarefa entity, Tarefa task) {
@@ -80,11 +81,14 @@ public class TarefaService {
     }
 
     public void concluir(Long tarefaId) {
-        Tarefa task = buscaService.findById(tarefaId);
+        Tarefa task = repository.findById(tarefaId)
+                .orElseThrow(() -> new TarefaException("Tarefa não encontrada - Impossível concluir"));
 
         task.concluirTarefa();
         task.setStatus(StatusTarefa.CONCLUIDA);
 
         repository.save(task);
+
     }
+
 }
