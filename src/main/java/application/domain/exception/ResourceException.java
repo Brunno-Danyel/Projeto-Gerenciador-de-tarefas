@@ -24,6 +24,13 @@ public class ResourceException {
         return new ApiErrors(mensagemErro);
     }
 
+    @ExceptionHandler(UsuarioException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public ApiErrors handleRegraNegocioException(UsuarioException ex) {
+        String mensagemErro = ex.getMessage();
+        return new ApiErrors(mensagemErro);
+    }
+
     @ExceptionHandler(MethodArgumentNotValidException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public ApiErrors handleMethodNotValidException(MethodArgumentNotValidException ex) {
