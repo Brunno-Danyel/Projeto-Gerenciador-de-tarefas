@@ -2,12 +2,8 @@ package application.domain.controller;
 
 import application.domain.dto.TarefaDTO;
 import application.domain.entities.Tarefa;
-import application.domain.entities.Usuario;
-import application.domain.enumeration.StatusTarefa;
-import application.domain.exception.TarefaException;
 import application.domain.repositories.TarefaRepository;
 import application.domain.services.TarefaService;
-import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Example;
 import org.springframework.data.domain.ExampleMatcher;
@@ -30,7 +26,7 @@ public class TarefaController {
 
     @PostMapping("/tarefa")
     @ResponseStatus(HttpStatus.CREATED)
-    public Tarefa createdTask(@RequestBody @Valid TarefaDTO tarefaDto)  {
+    public Tarefa createdTask(@RequestBody @Valid TarefaDTO tarefaDto) {
         return service.createdTask(tarefaDto);
     }
 
@@ -59,7 +55,7 @@ public class TarefaController {
     }
 
     @GetMapping("status/{status}")
-    public ResponseEntity<List<Tarefa>> findByStatusTarefa(@PathVariable String status){
+    public ResponseEntity<List<Tarefa>> findByStatusTarefa(@PathVariable String status) {
         List<Tarefa> listStatusTask = service.searchStatus(status);
         return ResponseEntity.ok().body(listStatusTask);
     }
@@ -98,6 +94,6 @@ public class TarefaController {
     @PutMapping("/{tarefaId}/concluir")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void concluir(@PathVariable Long tarefaId) {
-           service.concluir(tarefaId);
+        service.concluir(tarefaId);
     }
 }

@@ -30,6 +30,7 @@ public class TarefaDTO {
 
     private OffsetDateTime deadline;
 
+
     public static Tarefa fromDto(TarefaDTO dto) {
         Tarefa task = new Tarefa();
         task.setDescricao(dto.getDescricao());

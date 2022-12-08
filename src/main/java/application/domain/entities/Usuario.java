@@ -5,11 +5,9 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.springframework.beans.factory.annotation.Value;
 
 import javax.persistence.*;
 import javax.validation.constraints.Email;
-import javax.validation.constraints.NotEmpty;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
@@ -41,5 +39,13 @@ public class Usuario implements Serializable {
     @OneToMany(mappedBy = "responsavel")
     private List<Tarefa> tarefa = new ArrayList<>();
 
+    @JsonIgnore
     private boolean admin;
+
+    public Usuario(String login, String nome, String senha) {
+        this.login = login;
+        this.nome = nome;
+        this.senha = senha;
+    }
+
 }

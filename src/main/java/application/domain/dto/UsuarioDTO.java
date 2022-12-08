@@ -23,15 +23,8 @@ public class UsuarioDTO {
     @NotEmpty(message = "{campo.senha.obrigatorio}")
     private String senha;
 
-    private boolean admin;
 
-    public static Usuario fromDto(UsuarioDTO dto){
-        Usuario usuario = new Usuario();
-        usuario.setLogin(dto.getLogin());
-        usuario.setNome(dto.getNome());
-        usuario.setSenha(dto.getSenha());
-        usuario.setAdmin(dto.isAdmin());
-
-        return usuario;
+    public Usuario fromDto(UsuarioDTO usuario){
+        return new Usuario(login, nome, senha);
     }
 }
