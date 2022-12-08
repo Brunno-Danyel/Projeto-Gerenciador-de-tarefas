@@ -55,6 +55,12 @@ public class UserService implements UserDetailsService {
     @Transactional
     public Usuario save(UsuarioDTO usuario) {
         Usuario user = usuario.fromDto(usuario);
+        boolean loginEmUso = repository.findByLogin(usuario.getLogin()).stream()
+                .anyMatch(usuarioExistente -> !usuarioExistente.equals(usuario));
+
+        if (loginEmUso ) {
+            throw new UsuarioException("Já existe um cliente cadastrado com esse e-mail");
+        }
         return repository.save(user);
     }
 
