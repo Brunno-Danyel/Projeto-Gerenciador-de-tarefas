@@ -1,6 +1,7 @@
 package application.domain.services;
 
 import application.domain.dto.TarefaDTO;
+import application.domain.dto.UsuarioDTO;
 import application.domain.entities.Tarefa;
 import application.domain.entities.Usuario;
 import application.domain.enumeration.PrioridadeEnum;
@@ -86,6 +87,7 @@ public class TarefaService {
 
         task.concluirTarefa();
         task.setStatus(StatusTarefa.CONCLUIDA);
+        task.setDataConclusao(OffsetDateTime.now());
 
         repository.save(task);
 
