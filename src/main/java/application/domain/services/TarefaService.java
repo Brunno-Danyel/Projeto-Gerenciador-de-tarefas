@@ -1,21 +1,19 @@
 package application.domain.services;
 
 import application.domain.dto.TarefaDTO;
-import application.domain.dto.UsuarioDTO;
 import application.domain.entities.Tarefa;
 import application.domain.entities.Usuario;
-import application.domain.enumeration.PrioridadeEnum;
 import application.domain.enumeration.StatusTarefa;
 import application.domain.exception.ResourceNotFoundException;
 import application.domain.exception.TarefaException;
 import application.domain.repositories.TarefaRepository;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityNotFoundException;
 import java.time.OffsetDateTime;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class TarefaService {
@@ -29,14 +27,13 @@ public class TarefaService {
     @Autowired
     private BuscaTarefaService buscaService;
 
+
     public Tarefa createdTask(TarefaDTO tarefaDto) {
         Long idUsuario = tarefaDto.getIdUsuario();
         Usuario usuario = userService.findById(tarefaDto.getIdUsuario());
 
         Tarefa tarefa = tarefaDto.fromDto(tarefaDto);
         tarefa.setResponsavel(usuario);
-        tarefa.setDeadline(OffsetDateTime.now());
-        tarefa.setStatus(StatusTarefa.EM_ANDAMENTO);
         return repository.save(tarefa);
     }
 
@@ -92,5 +89,6 @@ public class TarefaService {
         repository.save(task);
 
     }
+
 
 }

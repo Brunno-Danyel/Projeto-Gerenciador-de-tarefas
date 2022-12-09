@@ -4,6 +4,7 @@ import application.domain.dto.TarefaDTO;
 import application.domain.entities.Tarefa;
 import application.domain.repositories.TarefaRepository;
 import application.domain.services.TarefaService;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Example;
 import org.springframework.data.domain.ExampleMatcher;
@@ -23,6 +24,7 @@ public class TarefaController {
 
     @Autowired
     private TarefaRepository repository;
+
 
     @PostMapping("/tarefa")
     @ResponseStatus(HttpStatus.CREATED)
@@ -49,9 +51,9 @@ public class TarefaController {
     }
 
     @GetMapping("descricao/{descricao}")
-    public List<Tarefa> findByDescription(@PathVariable String descricao) {
+    public ResponseEntity<List<Tarefa>> findByDescription(@PathVariable String descricao) {
         List<Tarefa> listDescricaoTask = service.searchDescription(descricao);
-        return listDescricaoTask;
+        return ResponseEntity.ok().body(listDescricaoTask);
     }
 
     @GetMapping("status/{status}")
@@ -96,4 +98,5 @@ public class TarefaController {
     public void concluir(@PathVariable Long tarefaId) {
         service.concluir(tarefaId);
     }
+
 }

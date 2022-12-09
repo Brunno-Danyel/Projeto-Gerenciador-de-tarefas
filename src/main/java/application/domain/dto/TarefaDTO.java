@@ -1,7 +1,9 @@
 package application.domain.dto;
 
 import application.domain.entities.Tarefa;
+import application.domain.entities.Usuario;
 import application.domain.enumeration.PrioridadeEnum;
+import application.domain.enumeration.StatusTarefa;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -37,7 +39,8 @@ public class TarefaDTO {
         task.setDeadline(dto.getDeadline());
         task.setTitulo(dto.getTitulo());
         task.setPrioridade(dto.getPrioridade());
-
+        task.setDeadline(OffsetDateTime.now());
+        task.setStatus(StatusTarefa.EM_ANDAMENTO);
         return task;
     }
 }
