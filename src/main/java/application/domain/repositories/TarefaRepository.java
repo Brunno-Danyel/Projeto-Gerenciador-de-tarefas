@@ -1,11 +1,13 @@
 package application.domain.repositories;
 
 import application.domain.entities.Tarefa;
+import application.domain.entities.Usuario;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface TarefaRepository extends JpaRepository<Tarefa, Long> {
 
@@ -21,4 +23,6 @@ public interface TarefaRepository extends JpaRepository<Tarefa, Long> {
 
     @Query(value = "select * from tarefa t join usuario u on t.id_user = u.id  where u.nome like %:nome%", nativeQuery = true)
     List<Tarefa> name(@Param(value = "nome") String nome);
+
+    Optional<List<Tarefa>> findByResponsavel(Usuario responsavel);
 }

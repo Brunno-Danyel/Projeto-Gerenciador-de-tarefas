@@ -2,11 +2,9 @@ package application.domain.entities;
 
 import application.domain.enumeration.PrioridadeEnum;
 import application.domain.enumeration.StatusTarefa;
+import application.domain.exception.TarefaException;
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.persistence.*;
 import java.time.OffsetDateTime;
@@ -51,7 +49,11 @@ public class Tarefa {
 
 
     public void concluirTarefa() {
+        if (status.equals(StatusTarefa.CONCLUIDA)) {
+            throw new TarefaException("Tarefa já concluída, por favor informe outro ID");
+        }
         setStatus(StatusTarefa.CONCLUIDA);
-    }
+        setDataConclusao(OffsetDateTime.now());
 
+    }
 }

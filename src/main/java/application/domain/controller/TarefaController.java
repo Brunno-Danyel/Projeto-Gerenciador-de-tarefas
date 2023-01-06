@@ -2,9 +2,9 @@ package application.domain.controller;
 
 import application.domain.dto.TarefaDTO;
 import application.domain.entities.Tarefa;
+import application.domain.entities.Usuario;
 import application.domain.repositories.TarefaRepository;
 import application.domain.services.TarefaService;
-import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Example;
 import org.springframework.data.domain.ExampleMatcher;
@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/tarefas")
@@ -28,7 +29,7 @@ public class TarefaController {
 
     @PostMapping("/tarefa")
     @ResponseStatus(HttpStatus.CREATED)
-    public Tarefa createdTask(@RequestBody @Valid TarefaDTO tarefaDto) {
+    public ResponseEntity createdTask(@RequestBody @Valid TarefaDTO tarefaDto) {
         return service.createdTask(tarefaDto);
     }
 
@@ -44,16 +45,23 @@ public class TarefaController {
         return ResponseEntity.ok().body(task);
     }
 
-    @GetMapping("nome/{nomeUsuario}")
-    public ResponseEntity<List<Tarefa>> findByNome(@PathVariable String nomeUsuario) {
-        List<Tarefa> listNameUser = service.searchName(nomeUsuario);
-        return ResponseEntity.ok().body(listNameUser);
+    @GetMapping("responsavel/{responsavel}")
+    public ResponseEntity<Optional<List<Tarefa>>> findByResponsavel(@PathVariable Usuario responsavel) {
+        Optional<List<Tarefa>> tarefa = service.searchResponsavel(responsavel);
+        return ResponseEntity.ok().body(tarefa);
     }
+
 
     @GetMapping("descricao/{descricao}")
     public ResponseEntity<List<Tarefa>> findByDescription(@PathVariable String descricao) {
         List<Tarefa> listDescricaoTask = service.searchDescription(descricao);
         return ResponseEntity.ok().body(listDescricaoTask);
+    }
+
+    @GetMapping("titulo/{titulo}")
+    public ResponseEntity<List<Tarefa>> findByTitle(@PathVariable String titulo) {
+        List<Tarefa> listTitleTask = service.searchTitle(titulo);
+        return ResponseEntity.ok().body(listTitleTask);
     }
 
     @GetMapping("status/{status}")

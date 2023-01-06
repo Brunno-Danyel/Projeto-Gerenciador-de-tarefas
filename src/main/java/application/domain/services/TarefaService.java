@@ -7,13 +7,14 @@ import application.domain.enumeration.StatusTarefa;
 import application.domain.exception.ResourceNotFoundException;
 import application.domain.exception.TarefaException;
 import application.domain.repositories.TarefaRepository;
-import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityNotFoundException;
 import java.time.OffsetDateTime;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class TarefaService {
@@ -28,13 +29,14 @@ public class TarefaService {
     private BuscaTarefaService buscaService;
 
 
-    public Tarefa createdTask(TarefaDTO tarefaDto) {
+    public ResponseEntity createdTask(TarefaDTO tarefaDto) {
         Long idUsuario = tarefaDto.getIdUsuario();
         Usuario usuario = userService.findById(tarefaDto.getIdUsuario());
 
         Tarefa tarefa = tarefaDto.fromDto(tarefaDto);
         tarefa.setResponsavel(usuario);
-        return repository.save(tarefa);
+        repository.save(tarefa);
+        return ResponseEntity.ok().body(tarefa);
     }
 
     public List<Tarefa> listTask() {
@@ -63,12 +65,17 @@ public class TarefaService {
         return repository.findByDescricao(descricao);
     }
 
-    public List<Tarefa> searchName(String titulo) {
+    public List<Tarefa> searchTitle(String titulo) {
         return repository.findByTitulo(titulo);
     }
 
     public List<Tarefa> searchStatus(String status) {
         return repository.status(status);
+    }
+
+    public Optional<List<Tarefa>> searchResponsavel(Usuario responsavel){
+        return Optional.ofNullable(repository.findByResponsavel(responsavel)
+                .orElseThrow(() -> new TarefaException("Usuario da tarefa não encontrado/Usuario sem tarefa atribuida")));
     }
 
     private void updateData(Tarefa entity, Tarefa task) {
@@ -79,16 +86,14 @@ public class TarefaService {
     }
 
     public void concluir(Long tarefaId) {
-        Tarefa task = repository.findById(tarefaId)
+        Tarefa tarefa = repository.findById(tarefaId)
                 .orElseThrow(() -> new TarefaException("Tarefa não encontrada - Impossível concluir"));
 
-        task.concluirTarefa();
-        task.setStatus(StatusTarefa.CONCLUIDA);
-        task.setDataConclusao(OffsetDateTime.now());
-
-        repository.save(task);
+        tarefa.concluirTarefa();
+        repository.save(tarefa);
 
     }
 
-
 }
+
+
