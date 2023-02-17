@@ -6,9 +6,9 @@ import application.domain.entities.Usuario;
 import application.domain.enumeration.StatusTarefa;
 import application.domain.exception.ResourceNotFoundException;
 import application.domain.exception.TarefaException;
+import application.domain.exception.UsuarioException;
 import application.domain.repositories.TarefaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityNotFoundException;
@@ -29,14 +29,17 @@ public class TarefaService {
     private BuscaTarefaService buscaService;
 
 
-    public ResponseEntity createdTask(TarefaDTO tarefaDto) {
+    public Tarefa createdTask(TarefaDTO tarefaDto) {
         Long idUsuario = tarefaDto.getIdUsuario();
         Usuario usuario = userService.findById(tarefaDto.getIdUsuario());
 
+
         Tarefa tarefa = tarefaDto.fromDto(tarefaDto);
+        if(tarefaDto.getPrioridade() == null){
+            throw new TarefaException("Campo prioridade não pode ser vazio!");
+        }
         tarefa.setResponsavel(usuario);
-        repository.save(tarefa);
-        return ResponseEntity.ok().body(tarefa);
+        return repository.save(tarefa);
     }
 
     public List<Tarefa> listTask() {
@@ -44,6 +47,9 @@ public class TarefaService {
     }
 
     public void removeTask(Long tarefaId) {
+        if (!repository.existsById(tarefaId)) {
+            throw new TarefaException("Tarefa não encontrada!");
+        }
         repository.deleteById(tarefaId);
     }
 
@@ -73,10 +79,11 @@ public class TarefaService {
         return repository.status(status);
     }
 
-    public Optional<List<Tarefa>> searchResponsavel(Usuario responsavel){
+    public Optional<List<Tarefa>> searchResponsavel(Usuario responsavel) {
         return Optional.ofNullable(repository.findByResponsavel(responsavel)
                 .orElseThrow(() -> new TarefaException("Usuario da tarefa não encontrado/Usuario sem tarefa atribuida")));
     }
+
 
     private void updateData(Tarefa entity, Tarefa task) {
         entity.setTitulo(task.getTitulo());
@@ -89,7 +96,11 @@ public class TarefaService {
         Tarefa tarefa = repository.findById(tarefaId)
                 .orElseThrow(() -> new TarefaException("Tarefa não encontrada - Impossível concluir"));
 
-        tarefa.concluirTarefa();
+        if (tarefa.getStatus().equals(StatusTarefa.CONCLUIDA)) {
+            throw new TarefaException("Tarefa já concluída, por favor informe outro ID");
+        }
+        tarefa.setStatus(StatusTarefa.CONCLUIDA);
+        tarefa.setDataConclusao(OffsetDateTime.now());
         repository.save(tarefa);
 
     }

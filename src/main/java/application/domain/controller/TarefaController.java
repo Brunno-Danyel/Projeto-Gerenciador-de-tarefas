@@ -29,7 +29,7 @@ public class TarefaController {
 
     @PostMapping("/tarefa")
     @ResponseStatus(HttpStatus.CREATED)
-    public ResponseEntity createdTask(@RequestBody @Valid TarefaDTO tarefaDto) {
+    public Tarefa createdTask(@RequestBody @Valid TarefaDTO tarefaDto) {
         return service.createdTask(tarefaDto);
     }
 
@@ -41,8 +41,8 @@ public class TarefaController {
 
     @GetMapping("id/{tarefaId}")
     public ResponseEntity<Tarefa> findByNumber(@PathVariable Long tarefaId) {
-        Tarefa task = service.findById(tarefaId);
-        return ResponseEntity.ok().body(task);
+        Tarefa tarefa = service.findById(tarefaId);
+        return ResponseEntity.ok().body(tarefa);
     }
 
     @GetMapping("responsavel/{responsavel}")
@@ -84,24 +84,18 @@ public class TarefaController {
 
     @DeleteMapping("/{tarefaId}")
     public ResponseEntity<Void> removeTask(@PathVariable Long tarefaId) {
-        if (!repository.existsById(tarefaId)) {
-            return ResponseEntity.notFound().build();
-        }
-
         service.removeTask(tarefaId);
-
         return ResponseEntity.noContent().build();
     }
 
     @PutMapping("/{tarefaId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public ResponseEntity<Tarefa> updateTask(@PathVariable Long tarefaId, @RequestBody @Valid Tarefa task) {
-        task = service.updateTask(tarefaId, task);
-        return ResponseEntity.ok().body(task);
-
+    public ResponseEntity<Tarefa> updateTask(@PathVariable Long tarefaId, @RequestBody @Valid Tarefa tarefa) {
+        tarefa = service.updateTask(tarefaId, tarefa);
+        return ResponseEntity.ok().body(tarefa);
     }
 
-    @PutMapping("/{tarefaId}/concluir")
+    @PutMapping("concluir/{tarefaId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void concluir(@PathVariable Long tarefaId) {
         service.concluir(tarefaId);

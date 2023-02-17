@@ -48,12 +48,4 @@ public class Tarefa {
     private OffsetDateTime dataConclusao;
 
 
-    public void concluirTarefa() {
-        if (status.equals(StatusTarefa.CONCLUIDA)) {
-            throw new TarefaException("Tarefa já concluída, por favor informe outro ID");
-        }
-        setStatus(StatusTarefa.CONCLUIDA);
-        setDataConclusao(OffsetDateTime.now());
-
-    }
 }
