@@ -13,9 +13,9 @@ import java.util.Optional;
 public interface TarefaRepository extends JpaRepository<Tarefa, Long> {
 
 
-    List<Tarefa> findByDescricao(String descricao);
+    Optional<List<Tarefa>> findByDescricao(String descricao);
 
-    List<Tarefa> findByTitulo(String titulo);
+    Optional<List<Tarefa>> findByTitulo(String titulo);
 
     @Query(value = "select * from tarefa t join usuario u on t.tb_id_user = u.id  where t.tb_status like %:status%", nativeQuery = true)
     List<Tarefa> status(@Param(value = "status") String status);

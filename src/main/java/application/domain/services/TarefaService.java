@@ -63,6 +63,9 @@ public class TarefaService {
 
     public Tarefa atualizandoTarefa(Long id, TarefaDTO tarefaDTO) {
         return repository.findById(id).map(tarefa -> {
+            if(tarefa.getStatus().equals(StatusTarefa.CONCLUIDA)){
+                throw new TarefaException("Impossível atualizar tarefas já CONCLUÍDAS!");
+            }
             Long idResponsavel = tarefaDTO.getIdUsuario();
             Usuario responsavel = userService.findById(tarefaDTO.getIdUsuario());
 
@@ -79,11 +82,11 @@ public class TarefaService {
     }
 
     public List<Tarefa> searchDescription(String descricao) {
-        return repository.findByDescricao(descricao);
+        return repository.findByDescricao(descricao).orElseThrow(() -> new TarefaNaoEncontradaException("Descrição da tarefa não encontrada!"));
     }
 
     public List<Tarefa> searchTitle(String titulo) {
-        return repository.findByTitulo(titulo);
+        return repository.findByTitulo(titulo).orElseThrow(() -> new TarefaNaoEncontradaException("Título da tarefa não encontrado!"));
     }
 
     public List<Tarefa> searchStatus(String status) {
