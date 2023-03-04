@@ -1,8 +1,6 @@
 package application.domain.services;
 
 import application.domain.dto.TarefaDTO;
-import application.domain.dto.TarefaDtoResponseData;
-import application.domain.dto.TarefaDtoResponseDataEmAndamento;
 import application.domain.entities.Tarefa;
 import application.domain.entities.Usuario;
 import application.domain.enumeration.StatusTarefa;
@@ -11,12 +9,14 @@ import application.domain.exception.TarefaNaoEncontradaException;
 import application.domain.repositories.TarefaRepository;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.mail.SimpleMailMessage;
+import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
 
-import java.time.OffsetDateTime;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 @Service
 public class TarefaService {
@@ -27,31 +27,32 @@ public class TarefaService {
     @Autowired
     private UserService userService;
 
+//    @Autowired
+//    private JavaMailSender mailSender;
+
     @Autowired
     private ModelMapper modelMapper;
+
+    @Autowired
+    private EmailService emailService;
+
+//    @Value("${spring.mail.username}")
+//    private String remetente;
 
 
     public void createdTask(TarefaDTO tarefaDto) {
         Long idUsuario = tarefaDto.getIdUsuario();
         Usuario responsavel = userService.findById(tarefaDto.getIdUsuario());
 
-
         Tarefa tarefa = tarefaDto.fromDto(tarefaDto);
         tarefa.setResponsavel(responsavel);
+
         repository.save(tarefa);
+        emailService.envioDeEmailTarefaAdicionada(tarefa);
     }
 
     public List<Tarefa> listTask() {
         return repository.findAll();
-    }
-
-    public List<TarefaDtoResponseData> listarTarefas(){
-        return repository.findAll().stream().map(tarefa -> {
-            if(tarefa.getStatus().equals(StatusTarefa.CONCLUIDA)){
-                return modelMapper.map(tarefa, TarefaDtoResponseData.class);
-            }
-            return modelMapper.map(tarefa, TarefaDtoResponseData.class);
-        }).collect(Collectors.toList());
     }
 
     public void removeTask(Long tarefaId) {
@@ -63,7 +64,7 @@ public class TarefaService {
 
     public Tarefa atualizandoTarefa(Long id, TarefaDTO tarefaDTO) {
         return repository.findById(id).map(tarefa -> {
-            if(tarefa.getStatus().equals(StatusTarefa.CONCLUIDA)){
+            if (tarefa.getStatus().equals(StatusTarefa.CONCLUIDA)) {
                 throw new TarefaException("Impossível atualizar tarefas já CONCLUÍDAS!");
             }
             Long idResponsavel = tarefaDTO.getIdUsuario();
@@ -107,9 +108,9 @@ public class TarefaService {
             throw new TarefaException("Tarefa já concluída, por favor informe outro ID");
         }
         tarefa.setStatus(StatusTarefa.CONCLUIDA);
-        tarefa.setDataConclusao(OffsetDateTime.now());
+        tarefa.setDataConclusao(LocalDate.now());
         repository.save(tarefa);
-
+        emailService.envioDeEmailTarefaConcluida(tarefa);
     }
 
 }

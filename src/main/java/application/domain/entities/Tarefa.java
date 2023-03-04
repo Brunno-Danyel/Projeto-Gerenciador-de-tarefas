@@ -7,11 +7,13 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.*;
 
 import javax.persistence.*;
+import java.time.LocalDate;
 import java.time.OffsetDateTime;
 
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
+@Builder
 @Entity
 public class Tarefa {
 
@@ -35,17 +37,17 @@ public class Tarefa {
     @Enumerated(EnumType.STRING)
     private PrioridadeEnum prioridade;
 
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy 'T' HH:mm:ss", locale = "pt-BR", timezone = "Brazil/East")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy", locale = "pt-BR", timezone = "Brazil/East")
     @Column(name = "tb_data_tarefa")
-    private OffsetDateTime deadline;
+    private LocalDate deadline;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "tb_status")
     private StatusTarefa status;
 
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy 'T' HH:mm:ss", locale = "pt-BR", timezone = "Brazil/East")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy", locale = "pt-BR", timezone = "Brazil/East")
     @Column(name = "tb_data_conclusao_tarefa")
-    private OffsetDateTime dataConclusao;
+    private LocalDate dataConclusao;
 
 
 }

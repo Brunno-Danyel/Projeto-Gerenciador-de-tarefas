@@ -4,8 +4,10 @@ import application.domain.dto.UsuarioDTO;
 import application.domain.entities.Usuario;
 import application.domain.exception.SenhaInvalidaException;
 import application.domain.exception.UsuarioException;
+import application.domain.exception.UsuarioNaoEncontradoException;
 import application.domain.repositories.UsuarioRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -49,7 +51,7 @@ public class UserService implements UserDetailsService {
 
     public Usuario findById(Long usuarioId) {
         return repository.findById(usuarioId)
-                .orElseThrow(() -> new UsuarioException("Usuario não encontrado"));
+                .orElseThrow(() -> new UsuarioNaoEncontradoException("Usuario não encontrado"));
     }
 
     @Transactional
