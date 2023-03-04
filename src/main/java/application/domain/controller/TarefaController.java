@@ -29,14 +29,14 @@ public class TarefaController {
 
     @PostMapping("/tarefa")
     @ResponseStatus(HttpStatus.CREATED)
-    public Tarefa createdTask(@RequestBody @Valid TarefaDTO tarefaDto) {
-        return service.createdTask(tarefaDto);
+    public void createdTask(@RequestBody @Valid TarefaDTO tarefaDto) {
+         service.createdTask(tarefaDto);
     }
 
     @GetMapping("/listar")
-    public ResponseEntity<List<Tarefa>> listTask() {
+    public List<Tarefa> listarTarefasConcluidas() {
         List<Tarefa> list = service.listTask();
-        return ResponseEntity.ok().body(list);
+        return list;
     }
 
     @GetMapping("id/{tarefaId}")
@@ -90,8 +90,8 @@ public class TarefaController {
 
     @PutMapping("/{tarefaId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public ResponseEntity<Tarefa> updateTask(@PathVariable Long tarefaId, @RequestBody @Valid Tarefa tarefa) {
-        tarefa = service.updateTask(tarefaId, tarefa);
+    public ResponseEntity<Tarefa> updateTask(@PathVariable Long tarefaId, @RequestBody @Valid TarefaDTO tarefaDTO) {
+        Tarefa tarefa = service.atualizandoTarefa(tarefaId, tarefaDTO);
         return ResponseEntity.ok().body(tarefa);
     }
 

@@ -9,7 +9,6 @@ import lombok.Setter;
 
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
-import java.time.LocalDate;
 import java.time.OffsetDateTime;
 
 
@@ -31,7 +30,7 @@ public class TarefaDTO {
     @NotNull(message = "{campo.prioridade.obrigatorio}")
     private PrioridadeEnum prioridade;
 
-    private LocalDate deadline;
+    private OffsetDateTime deadline;
 
 
     public static Tarefa fromDto(TarefaDTO dto) {
@@ -40,7 +39,7 @@ public class TarefaDTO {
         task.setDeadline(dto.getDeadline());
         task.setTitulo(dto.getTitulo());
         task.setPrioridade(dto.getPrioridade());
-        task.setDeadline(LocalDate.now());
+        task.setDeadline(OffsetDateTime.now());
         task.setStatus(StatusTarefa.EM_ANDAMENTO);
         return task;
     }
