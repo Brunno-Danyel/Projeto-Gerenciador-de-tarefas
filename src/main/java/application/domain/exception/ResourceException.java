@@ -20,6 +20,20 @@ public class ResourceException {
         return new ApiErrors(mensagemErro);
     }
 
+    @ExceptionHandler(TarefaNaoEncontradaException.class)
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    public ApiErrors handleRegraNegocioException(TarefaNaoEncontradaException ex) {
+        String mensagemErro = ex.getMessage();
+        return new ApiErrors(mensagemErro);
+    }
+
+    @ExceptionHandler(UsuarioNaoEncontradoException.class)
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    public ApiErrors handleRegraNegocioException(UsuarioNaoEncontradoException ex) {
+        String mensagemErro = ex.getMessage();
+        return new ApiErrors(mensagemErro);
+    }
+
     @ExceptionHandler(UsuarioException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public ApiErrors handleRegraNegocioException(UsuarioException ex) {
