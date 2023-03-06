@@ -20,7 +20,7 @@ public class EmailService {
     @Value("${spring.mail.username}")
     private String remetente;
 
-    public void envioDeEmailTarefaAdicionada(Tarefa tarefa){
+    public void envioDeEmailTarefaAdicionada(Tarefa tarefa) {
 
         Long idUsuario = tarefa.getResponsavel().getId();
         Usuario responsavel = userService.findById(tarefa.getResponsavel().getId());
@@ -42,7 +42,7 @@ public class EmailService {
         javaMailSender.send(email);
     }
 
-    public void envioDeEmailTarefaConcluida(Tarefa tarefa){
+    public void envioDeEmailTarefaConcluida(Tarefa tarefa) {
 
         Long idUsuario = tarefa.getResponsavel().getId();
         Usuario responsavel = userService.findById(tarefa.getResponsavel().getId());

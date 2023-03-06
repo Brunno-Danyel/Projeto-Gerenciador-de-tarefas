@@ -9,9 +9,6 @@ import application.domain.exception.TarefaNaoEncontradaException;
 import application.domain.repositories.TarefaRepository;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.mail.SimpleMailMessage;
-import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -27,17 +24,11 @@ public class TarefaService {
     @Autowired
     private UserService userService;
 
-//    @Autowired
-//    private JavaMailSender mailSender;
-
     @Autowired
     private ModelMapper modelMapper;
 
     @Autowired
     private EmailService emailService;
-
-//    @Value("${spring.mail.username}")
-//    private String remetente;
 
 
     public void createdTask(TarefaDTO tarefaDto) {
