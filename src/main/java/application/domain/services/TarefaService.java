@@ -11,6 +11,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.mail.MessagingException;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
@@ -31,7 +32,7 @@ public class TarefaService {
     private EmailService emailService;
 
 
-    public void createdTask(TarefaDTO tarefaDto) {
+    public void createdTask(TarefaDTO tarefaDto) throws MessagingException {
         Long idUsuario = tarefaDto.getIdUsuario();
         Usuario responsavel = userService.findById(tarefaDto.getIdUsuario());
 
@@ -39,7 +40,7 @@ public class TarefaService {
         tarefa.setResponsavel(responsavel);
 
         repository.save(tarefa);
-        emailService.envioDeEmailTarefaAdicionada(tarefa);
+        emailService.envioDeEmailComAnexo(tarefa);
     }
 
     public List<Tarefa> listTask() {
@@ -91,7 +92,7 @@ public class TarefaService {
     }
 
 
-    public void concluir(Long tarefaId) {
+    public void concluir(Long tarefaId) throws MessagingException {
         Tarefa tarefa = repository.findById(tarefaId)
                 .orElseThrow(() -> new TarefaNaoEncontradaException("Tarefa não encontrada - Impossível concluir"));
 
@@ -101,7 +102,7 @@ public class TarefaService {
         tarefa.setStatus(StatusTarefa.CONCLUIDA);
         tarefa.setDataConclusao(LocalDate.now());
         repository.save(tarefa);
-        emailService.envioDeEmailTarefaConcluida(tarefa);
+        emailService.envioDeEmailTarefaConcluidaComAnexo(tarefa);
     }
 
 }

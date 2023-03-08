@@ -4,9 +4,14 @@ import application.domain.entities.Tarefa;
 import application.domain.entities.Usuario;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
+
+import javax.mail.MessagingException;
+import javax.mail.internet.MimeMessage;
 
 @Service
 public class EmailService {
@@ -20,49 +25,55 @@ public class EmailService {
     @Value("${spring.mail.username}")
     private String remetente;
 
-    public void envioDeEmailTarefaAdicionada(Tarefa tarefa) {
 
-        Long idUsuario = tarefa.getResponsavel().getId();
+    public void envioDeEmailComAnexo(Tarefa tarefa) throws MessagingException {
         Usuario responsavel = userService.findById(tarefa.getResponsavel().getId());
 
+        MimeMessage email = javaMailSender.createMimeMessage();
 
-        SimpleMailMessage email = new SimpleMailMessage();
-        email.setFrom(remetente);
-        email.setTo(responsavel.getLogin());
-        email.setSubject("Tarefa adicionada com sucesso!");
-        email.setText(
-                "Número da tarefa: " + (tarefa.getId()) + "\n" +
-                        "Título da Tarefa: " + tarefa.getTitulo() + " \n" +
-                        " Descrição da tarefa: " + tarefa.getDescricao() + " \n" +
-                        " Nome do responsavel: " + tarefa.getResponsavel().getNome() + " \n" +
-                        " Endereço de e-mail do responsável: " + tarefa.getResponsavel().getLogin() + " \n" +
-                        " Status da tarefa: " + tarefa.getStatus().toString() + " \n" +
-                        " Prioridade da tarefa: " + tarefa.getPrioridade().toString() + " \n" +
+        MimeMessageHelper helper = new MimeMessageHelper(email, true);
+
+        helper.setFrom(remetente);
+        helper.setTo(responsavel.getLogin());
+        helper.setSubject("Tarefa adicionada com sucesso!");
+        helper.setText(
+                "--> Assim como os habitantes de Konoha confiam em seu hokage, estou confiando essa tarefa a você, boa tarefa! <--" + "\n\n" +
+                "Número da tarefa: " + (tarefa.getId()) + "\n\n" +
+                        "Título da Tarefa: " + tarefa.getTitulo() + " \n\n" +
+                        " Descrição da tarefa: " + tarefa.getDescricao() + " \n\n" +
+                        " Nome do responsavel: " + tarefa.getResponsavel().getNome() + " \n\n" +
+                        " Endereço de e-mail do responsável: " + tarefa.getResponsavel().getLogin() + " \n\n" +
+                        " Status da tarefa: " + tarefa.getStatus().toString() + " \n\n" +
+                        " Prioridade da tarefa: " + tarefa.getPrioridade().toString() + " \n\n" +
                         " Data da abertura da tarefa: " + tarefa.getDeadline().toString());
+
+        helper.addAttachment("naruto.jpg", new ClassPathResource("arquivos/naruto.jpg"));
         javaMailSender.send(email);
     }
 
-    public void envioDeEmailTarefaConcluida(Tarefa tarefa) {
-
-        Long idUsuario = tarefa.getResponsavel().getId();
+    public void envioDeEmailTarefaConcluidaComAnexo(Tarefa tarefa) throws MessagingException {
         Usuario responsavel = userService.findById(tarefa.getResponsavel().getId());
 
+        MimeMessage email = javaMailSender.createMimeMessage();
 
-        SimpleMailMessage email = new SimpleMailMessage();
-        email.setFrom(remetente);
-        email.setTo(responsavel.getLogin());
-        email.setSubject("Tarefa concluída com sucesso!");
-        email.setText(
-                "Número da tarefa: " + (tarefa.getId()) + "\n" +
-                        "Título da Tarefa: " + tarefa.getTitulo() + " \n" +
-                        " Descrição da tarefa: " + tarefa.getDescricao() + " \n" +
-                        " Nome do responsavel: " + tarefa.getResponsavel().getNome() + " \n" +
-                        " Endereço de e-mail do responsável: " + tarefa.getResponsavel().getLogin() + " \n" +
-                        " Status da tarefa: " + tarefa.getStatus().toString() + " \n" +
-                        " Prioridade da tarefa: " + tarefa.getPrioridade().toString() + " \n" +
-                        " Data da abertura da tarefa: " + tarefa.getDeadline().toString() + " \n" +
+        MimeMessageHelper helper = new MimeMessageHelper(email, true);
+
+        helper.setFrom(remetente);
+        helper.setTo(responsavel.getLogin());
+        helper.setSubject("Tarefa concluída com sucesso!");
+        helper.setText(
+                "--> Parabéns por ter concluído a tarefa! <--" + "\n\n" +
+                        "Número da tarefa: " + (tarefa.getId()) + "\n\n" +
+                        "Título da Tarefa: " + tarefa.getTitulo() + " \n\n" +
+                        " Descrição da tarefa: " + tarefa.getDescricao() + " \n\n" +
+                        " Nome do responsavel: " + tarefa.getResponsavel().getNome() + " \n\n" +
+                        " Endereço de e-mail do responsável: " + tarefa.getResponsavel().getLogin() + " \n\n" +
+                        " Status da tarefa: " + tarefa.getStatus().toString() + " \n\n" +
+                        " Prioridade da tarefa: " + tarefa.getPrioridade().toString() + " \n\n" +
+                        " Data da abertura da tarefa: " + tarefa.getDeadline().toString() + "\n\n" +
                         " Data de conclusão da tarefa: " + tarefa.getDataConclusao().toString());
-        javaMailSender.send(email);
 
+        helper.addAttachment("narutoJoinha.jpg", new ClassPathResource("arquivos/narutoJoinha.jpg"));
+        javaMailSender.send(email);
     }
 }

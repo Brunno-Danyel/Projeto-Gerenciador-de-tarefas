@@ -12,6 +12,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.mail.MessagingException;
 import javax.validation.Valid;
 import java.util.List;
 import java.util.Optional;
@@ -29,7 +30,7 @@ public class TarefaController {
 
     @PostMapping("/tarefa")
     @ResponseStatus(HttpStatus.CREATED)
-    public void createdTask(@RequestBody @Valid TarefaDTO tarefaDto) {
+    public void createdTask(@RequestBody @Valid TarefaDTO tarefaDto) throws MessagingException {
          service.createdTask(tarefaDto);
     }
 
@@ -97,7 +98,7 @@ public class TarefaController {
 
     @PutMapping("concluir/{tarefaId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void concluir(@PathVariable Long tarefaId) {
+    public void concluir(@PathVariable Long tarefaId) throws MessagingException {
         service.concluir(tarefaId);
     }
 
