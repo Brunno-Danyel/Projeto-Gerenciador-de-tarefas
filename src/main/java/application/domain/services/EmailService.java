@@ -45,7 +45,8 @@ public class EmailService {
                         " Endereço de e-mail do responsável: " + tarefa.getResponsavel().getLogin() + " \n\n" +
                         " Status da tarefa: " + tarefa.getStatus().toString() + " \n\n" +
                         " Prioridade da tarefa: " + tarefa.getPrioridade().toString() + " \n\n" +
-                        " Data da abertura da tarefa: " + tarefa.getDeadline().toString());
+                        " Data da abertura da tarefa: " + tarefa.getDeadline().toString() + "\n\n" +
+                        " Data prevista para a conclusão da tarefa: " + tarefa.getDataPrevistaConclusao());
 
         helper.addAttachment("naruto.jpg", new ClassPathResource("arquivos/naruto.jpg"));
         javaMailSender.send(email);
@@ -71,6 +72,7 @@ public class EmailService {
                         " Status da tarefa: " + tarefa.getStatus().toString() + " \n\n" +
                         " Prioridade da tarefa: " + tarefa.getPrioridade().toString() + " \n\n" +
                         " Data da abertura da tarefa: " + tarefa.getDeadline().toString() + "\n\n" +
+                        " Data prevista para a conclusão da tarefa: " + tarefa.getDataPrevistaConclusao() + "\n\n" +
                         " Data de conclusão da tarefa: " + tarefa.getDataConclusao().toString());
 
         helper.addAttachment("narutoJoinha.jpg", new ClassPathResource("arquivos/narutoJoinha.jpg"));
