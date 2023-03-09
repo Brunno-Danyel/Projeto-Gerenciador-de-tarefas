@@ -51,5 +51,9 @@ public class Tarefa {
     @Column(name = "tb_data_conclusao_tarefa")
     private LocalDate dataConclusao;
 
+    @Column(name = "tb_data_prevista")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy", locale = "pt-BR", timezone = "Brazil/East")
+    private LocalDate dataPrevistaConclusao;
+
 
 }
