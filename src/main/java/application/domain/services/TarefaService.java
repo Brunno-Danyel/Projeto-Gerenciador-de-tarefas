@@ -3,6 +3,7 @@ package application.domain.services;
 import application.domain.dto.TarefaDTO;
 import application.domain.entities.Tarefa;
 import application.domain.entities.Usuario;
+import application.domain.enumeration.PrioridadeEnum;
 import application.domain.enumeration.StatusTarefa;
 import application.domain.exception.TarefaException;
 import application.domain.exception.TarefaNaoEncontradaException;
@@ -36,7 +37,7 @@ public class TarefaService {
         Long idUsuario = tarefaDto.getIdUsuario();
         Usuario responsavel = userService.findById(tarefaDto.getIdUsuario());
 
-        Tarefa tarefa = tarefaDto.fromDto(tarefaDto);
+        Tarefa tarefa = fromDto(tarefaDto);
         tarefa.setResponsavel(responsavel);
 
         repository.save(tarefa);
@@ -103,6 +104,18 @@ public class TarefaService {
         tarefa.setDataConclusao(LocalDate.now());
         repository.save(tarefa);
         emailService.envioDeEmailTarefaConcluidaComAnexo(tarefa);
+    }
+
+    public static Tarefa fromDto(TarefaDTO dto) {
+        Tarefa task = new Tarefa();
+        task.setDescricao(dto.getDescricao());
+        task.setDeadline(dto.getDeadline());
+        task.setTitulo(dto.getTitulo());
+        task.setPrioridade(dto.getPrioridade());
+        task.setDataPrevistaConclusao(LocalDate.now().plusDays(dto.getPrazoParaConclusãoEmDias()));
+        task.setDeadline(LocalDate.now());
+        task.setStatus(StatusTarefa.EM_ANDAMENTO);
+        return task;
     }
 
 }
