@@ -31,20 +31,7 @@ public class TarefaDTO {
     @NotNull(message = "{campo.prioridade.obrigatorio}")
     private PrioridadeEnum prioridade;
 
-    private Integer prazoParaConclusãoEmDias;
+    @NotNull(message = "{campo.prazoEmDias.obrigatorio}")
+    private Integer prazoParaConclusaoEmDias;
 
-    private LocalDate deadline;
-
-
-//    public static Tarefa fromDto(TarefaDTO dto) {
-//        Tarefa task = new Tarefa();
-//        task.setDescricao(dto.getDescricao());
-//        task.setDeadline(dto.getDeadline());
-//        task.setTitulo(dto.getTitulo());
-//        task.setPrioridade(dto.getPrioridade());
-//        task.setDeadline(LocalDate.now());
-//        task.setDataPrevistaConclusao(LocalDate.now().plusDays(10));
-//        task.setStatus(StatusTarefa.EM_ANDAMENTO);
-//        return task;
-//    }
 }
