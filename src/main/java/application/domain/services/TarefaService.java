@@ -114,7 +114,7 @@ public class TarefaService {
            tarefa.setDataPrevistaConclusao(novaDataPrevista);
         }
          if(tarefa.getDataPrevistaConclusao().getDayOfWeek().equals(DayOfWeek.SUNDAY)){
-             LocalDate novaDataPrevista =  tarefa.getDataPrevistaConclusao().plusDays(2);
+             LocalDate novaDataPrevista =  tarefa.getDataPrevistaConclusao().plusDays(1);
              tarefa.setDataPrevistaConclusao(novaDataPrevista);
         }
         return tarefa.getDataPrevistaConclusao();
