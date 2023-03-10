@@ -3,7 +3,6 @@ package application.domain.services;
 import application.domain.dto.TarefaDTO;
 import application.domain.entities.Tarefa;
 import application.domain.entities.Usuario;
-import application.domain.enumeration.PrioridadeEnum;
 import application.domain.enumeration.StatusTarefa;
 import application.domain.exception.TarefaException;
 import application.domain.exception.TarefaNaoEncontradaException;
@@ -13,7 +12,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.mail.MessagingException;
+import java.time.DayOfWeek;
 import java.time.LocalDate;
+import java.util.Calendar;
 import java.util.List;
 import java.util.Optional;
 
@@ -34,10 +35,11 @@ public class TarefaService {
 
 
     public void createdTask(TarefaDTO tarefaDto) throws MessagingException {
-        Long idUsuario = tarefaDto.getIdUsuario();
-        Usuario responsavel = userService.findById(tarefaDto.getIdUsuario());
+        Long idResponsavel = tarefaDto.getIdUsuario();
+        Usuario responsavel = userService.findById(idResponsavel);
 
         Tarefa tarefa = fromDto(tarefaDto);
+        verificarDataFDS(tarefa);
         tarefa.setResponsavel(responsavel);
 
         repository.save(tarefa);
@@ -61,7 +63,7 @@ public class TarefaService {
                 throw new TarefaException("Impossível atualizar tarefas já CONCLUÍDAS!");
             }
             Long idResponsavel = tarefaDTO.getIdUsuario();
-            Usuario responsavel = userService.findById(tarefaDTO.getIdUsuario());
+            Usuario responsavel = userService.findById(idResponsavel);
 
             tarefa.setTitulo(tarefaDTO.getTitulo());
             tarefa.setDescricao(tarefaDTO.getDescricao());
@@ -105,15 +107,26 @@ public class TarefaService {
         repository.save(tarefa);
         emailService.envioDeEmailTarefaConcluidaComAnexo(tarefa);
     }
+    private LocalDate verificarDataFDS(Tarefa tarefa){
+
+        if(tarefa.getDataPrevistaConclusao().getDayOfWeek().equals(DayOfWeek.SATURDAY)){
+           LocalDate novaDataPrevista =  tarefa.getDataPrevistaConclusao().plusDays(2);
+           tarefa.setDataPrevistaConclusao(novaDataPrevista);
+        }
+         if(tarefa.getDataPrevistaConclusao().getDayOfWeek().equals(DayOfWeek.SUNDAY)){
+             LocalDate novaDataPrevista =  tarefa.getDataPrevistaConclusao().plusDays(2);
+             tarefa.setDataPrevistaConclusao(novaDataPrevista);
+        }
+        return tarefa.getDataPrevistaConclusao();
+    }
 
     public static Tarefa fromDto(TarefaDTO dto) {
         Tarefa task = new Tarefa();
         task.setDescricao(dto.getDescricao());
-        task.setDeadline(dto.getDeadline());
         task.setTitulo(dto.getTitulo());
         task.setPrioridade(dto.getPrioridade());
-        task.setDataPrevistaConclusao(LocalDate.now().plusDays(dto.getPrazoParaConclusãoEmDias()));
-        task.setDeadline(LocalDate.now());
+        task.setDataPrevistaConclusao(java.time.LocalDate.now().plusDays(dto.getPrazoParaConclusaoEmDias()));
+        task.setDeadline(java.time.LocalDate.now());
         task.setStatus(StatusTarefa.EM_ANDAMENTO);
         return task;
     }
