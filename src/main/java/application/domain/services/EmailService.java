@@ -37,7 +37,7 @@ public class EmailService {
         helper.setTo(responsavel.getLogin());
         helper.setSubject("Tarefa adicionada com sucesso!");
         helper.setText(
-                "--> Assim como os habitantes de Konoha confiam em seu hokage, estou confiando essa tarefa a você, boa tarefa! <--" + "\n\n" +
+             //   "--> Assim como os habitantes de Konoha confiam em seu hokage, estou confiando essa tarefa a você, boa tarefa! <--" + "\n\n" +
                 "Número da tarefa: " + (tarefa.getId()) + "\n\n" +
                         "Título da Tarefa: " + tarefa.getTitulo() + " \n\n" +
                         " Descrição da tarefa: " + tarefa.getDescricao() + " \n\n" +
@@ -48,7 +48,7 @@ public class EmailService {
                         " Data da abertura da tarefa: " + tarefa.getDeadline().toString() + "\n\n" +
                         " Data prevista para a conclusão da tarefa: " + tarefa.getDataPrevistaConclusao());
 
-        helper.addAttachment("naruto.jpg", new ClassPathResource("arquivos/naruto.jpg"));
+        helper.addAttachment("narutoSorrindo.jpg", new ClassPathResource("arquivos/narutoSorrindo.jpg"));
         javaMailSender.send(email);
     }
 
@@ -76,6 +76,32 @@ public class EmailService {
                         " Data de conclusão da tarefa: " + tarefa.getDataConclusao().toString());
 
         helper.addAttachment("narutoJoinha.jpg", new ClassPathResource("arquivos/narutoJoinha.jpg"));
+        javaMailSender.send(email);
+    }
+    public void envioDeEmailTarefaAtrasada(Tarefa tarefa) throws MessagingException {
+
+        Usuario responsavel = userService.findById(tarefa.getResponsavel().getId());
+
+        MimeMessage email = javaMailSender.createMimeMessage();
+
+        MimeMessageHelper helper = new MimeMessageHelper(email, true);
+
+        helper.setFrom(remetente);
+        helper.setTo(responsavel.getLogin());
+        helper.setSubject("Tarefa em atraso!");
+        helper.setText(
+                "--> Tarefa em Atraso, por favor concluir tarefa. <--" + "\n\n" +
+                        "Número da tarefa: " + (tarefa.getId()) + "\n\n" +
+                        "Título da Tarefa: " + tarefa.getTitulo() + " \n\n" +
+                        " Descrição da tarefa: " + tarefa.getDescricao() + " \n\n" +
+                        " Nome do responsavel: " + tarefa.getResponsavel().getNome() + " \n\n" +
+                        " Endereço de e-mail do responsável: " + tarefa.getResponsavel().getLogin() + " \n\n" +
+                        " Status da tarefa: " + tarefa.getStatus().toString() + " \n\n" +
+                        " Prioridade da tarefa: " + tarefa.getPrioridade().toString() + " \n\n" +
+                        " Data da abertura da tarefa: " + tarefa.getDeadline().toString() + "\n\n" +
+                        " Data prevista para a conclusão da tarefa: " + tarefa.getDataPrevistaConclusao());
+
+        helper.addAttachment("narutoChateado.jpg", new ClassPathResource("arquivos/narutoChateado.jpg"));
         javaMailSender.send(email);
     }
 }
