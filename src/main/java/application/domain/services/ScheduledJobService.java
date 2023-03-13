@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
+import javax.mail.MessagingException;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -24,18 +25,35 @@ public class ScheduledJobService {
     @Autowired
     private TarefaRepository tarefaRepository;
 
-    @Scheduled(cron = TAREFAS_ATRASO)
+    @Autowired
+    private EmailService emailService;
+
+    @Scheduled(cron = "0 25 10 1/1 * ?")
     private void converterTarefasAtrasadas() {
-        List<Tarefa> tarefasVerificadas = tarefaService.listTask().stream().map(tarefas ->{
-            if(tarefas.getDataPrevistaConclusao() != null && tarefas.getDataPrevistaConclusao().isBefore(LocalDate.now())){
+        List<Tarefa> tarefasVerificadas = tarefaService.listTask().stream().map(tarefas -> {
+            if (tarefas.getDataPrevistaConclusao() != null && tarefas.getDataPrevistaConclusao().isBefore(LocalDate.now()) && tarefas.getDataConclusao() == null) {
                 tarefas.setStatus(StatusTarefa.ATRASADA);
             }
             tarefaRepository.save(tarefas);
             return tarefas;
         }).collect(Collectors.toList());
-    log.info("Agendamento realizado!");
+        log.info("Agendamento realizado!");
     }
 
+    @Scheduled(cron = "0 34 10 1/1 * ?")
+    private void enviarTarefasEmAtraso() {
+        List<Tarefa> tarefasEmAtraso = tarefaService.listTask().stream().map(tarefas -> {
+            if(tarefas.getStatus().equals(StatusTarefa.ATRASADA)){
+                try {
+                    emailService.envioDeEmailTarefaAtrasada(tarefas);
+                } catch (MessagingException e) {
+                    throw new RuntimeException(e);
+                }
+            }
+            return tarefas;
+        }).collect(Collectors.toList());
+        log.info("E-mail enviado com sucesso!");
+    }
 
 
 }
