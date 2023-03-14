@@ -6,15 +6,17 @@ import application.domain.entities.Usuario;
 import application.domain.enumeration.StatusTarefa;
 import application.domain.exception.TarefaException;
 import application.domain.exception.TarefaNaoEncontradaException;
+import application.domain.exception.UsuarioNaoEncontradoException;
 import application.domain.repositories.TarefaRepository;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Example;
+import org.springframework.data.domain.ExampleMatcher;
 import org.springframework.stereotype.Service;
 
 import javax.mail.MessagingException;
 import java.time.DayOfWeek;
 import java.time.LocalDate;
-import java.util.Calendar;
 import java.util.List;
 import java.util.Optional;
 
@@ -34,7 +36,7 @@ public class TarefaService {
     private EmailService emailService;
 
 
-    public void createdTask(TarefaDTO tarefaDto) throws MessagingException {
+    public void criarTarefa(TarefaDTO tarefaDto) throws MessagingException {
         Long idResponsavel = tarefaDto.getIdUsuario();
         Usuario responsavel = userService.findById(idResponsavel);
 
@@ -46,18 +48,18 @@ public class TarefaService {
         emailService.envioDeEmailComAnexo(tarefa);
     }
 
-    public List<Tarefa> listTask() {
+    public List<Tarefa> listarTodasTarefas() {
         return repository.findAll();
     }
 
-    public void removeTask(Long tarefaId) {
+    public void removerTarefa(Long tarefaId) {
         if (!repository.existsById(tarefaId)) {
             throw new TarefaNaoEncontradaException("Tarefa não encontrada!");
         }
         repository.deleteById(tarefaId);
     }
 
-    public Tarefa atualizandoTarefa(Long id, TarefaDTO tarefaDTO) {
+    public Tarefa atualizarTarefa(Long id, TarefaDTO tarefaDTO) {
         return repository.findById(id).map(tarefa -> {
             if (tarefa.getStatus().equals(StatusTarefa.CONCLUIDA)) {
                 throw new TarefaException("Impossível atualizar tarefas já CONCLUÍDAS!");
@@ -73,29 +75,28 @@ public class TarefaService {
         }).orElseThrow(() -> new TarefaNaoEncontradaException("Tarefa não encontrada!"));
     }
 
-    public Tarefa findById(Long tarefaId) {
+    public Tarefa buscarTarefaPorId(Long tarefaId) {
         return repository.findById(tarefaId).orElseThrow(() -> new TarefaNaoEncontradaException("Tarefa não encontrada!"));
     }
 
-    public List<Tarefa> searchDescription(String descricao) {
+    public List<Tarefa> buscarDescricaoTarefa(String descricao) {
         return repository.findByDescricao(descricao).orElseThrow(() -> new TarefaNaoEncontradaException("Descrição da tarefa não encontrada!"));
     }
 
-    public List<Tarefa> searchTitle(String titulo) {
+    public List<Tarefa> buscarTituloTarefa(String titulo) {
         return repository.findByTitulo(titulo).orElseThrow(() -> new TarefaNaoEncontradaException("Título da tarefa não encontrado!"));
     }
 
-    public List<Tarefa> searchStatus(String status) {
+    public List<Tarefa> buscarStatusTarefa(String status) {
         return repository.status(status);
     }
 
-    public Optional<List<Tarefa>> searchResponsavel(Usuario responsavel) {
+    public Optional<List<Tarefa>> buscarResponsavelTarefa(Usuario responsavel) {
         return Optional.ofNullable(repository.findByResponsavel(responsavel)
-                .orElseThrow(() -> new TarefaNaoEncontradaException("Responsavel da tarefa não encontrado/Usuario sem tarefa atribuida")));
+                .orElseThrow(() -> new UsuarioNaoEncontradoException("Responsavel da tarefa não encontrado!")));
     }
 
-
-    public void concluir(Long tarefaId) throws MessagingException {
+    public void concluirTarefa(Long tarefaId) throws MessagingException {
         Tarefa tarefa = repository.findById(tarefaId)
                 .orElseThrow(() -> new TarefaNaoEncontradaException("Tarefa não encontrada - Impossível concluir"));
 
@@ -107,30 +108,45 @@ public class TarefaService {
         repository.save(tarefa);
         emailService.envioDeEmailTarefaConcluidaComAnexo(tarefa);
     }
-    private LocalDate verificarDataFDS(Tarefa tarefa){
 
-        if(tarefa.getDataPrevistaConclusao().getDayOfWeek().equals(DayOfWeek.SATURDAY)){
-           LocalDate novaDataPrevista =  tarefa.getDataPrevistaConclusao().plusDays(2);
-           tarefa.setDataPrevistaConclusao(novaDataPrevista);
+    private LocalDate verificarDataFDS(Tarefa tarefa) {
+
+        if (tarefa.getDataPrevistaConclusao().getDayOfWeek().equals(DayOfWeek.SATURDAY)) {
+            LocalDate novaDataPrevista = tarefa.getDataPrevistaConclusao().plusDays(2);
+            tarefa.setDataPrevistaConclusao(novaDataPrevista);
         }
-         if(tarefa.getDataPrevistaConclusao().getDayOfWeek().equals(DayOfWeek.SUNDAY)){
-             LocalDate novaDataPrevista =  tarefa.getDataPrevistaConclusao().plusDays(1);
-             tarefa.setDataPrevistaConclusao(novaDataPrevista);
+        if (tarefa.getDataPrevistaConclusao().getDayOfWeek().equals(DayOfWeek.SUNDAY)) {
+            LocalDate novaDataPrevista = tarefa.getDataPrevistaConclusao().plusDays(1);
+            tarefa.setDataPrevistaConclusao(novaDataPrevista);
         }
         return tarefa.getDataPrevistaConclusao();
     }
 
-    public static Tarefa fromDto(TarefaDTO dto) {
-        Tarefa task = new Tarefa();
-        task.setDescricao(dto.getDescricao());
-        task.setTitulo(dto.getTitulo());
-        task.setPrioridade(dto.getPrioridade());
-        task.setDataPrevistaConclusao(java.time.LocalDate.now().plusDays(dto.getPrazoParaConclusaoEmDias()));
-        task.setDeadline(java.time.LocalDate.now());
-        task.setStatus(StatusTarefa.EM_ANDAMENTO);
-        return task;
+    public List<Tarefa> filtro(Tarefa tarefa){
+        ExampleMatcher matcher = ExampleMatcher
+                .matching()
+                .withIgnoreCase()
+                .withStringMatcher(
+                        ExampleMatcher.StringMatcher.CONTAINING);
+
+        Example example = Example.of(tarefa, matcher);
+        return repository.findAll(example);
     }
 
+    public static Tarefa fromDto(TarefaDTO dto) {
+        Tarefa tarefa = new Tarefa();
+        tarefa.setDescricao(dto.getDescricao());
+        tarefa.setTitulo(dto.getTitulo());
+        tarefa.setPrioridade(dto.getPrioridade());
+        tarefa.setDataPrevistaConclusao(java.time.LocalDate.now().plusDays(dto.getPrazoParaConclusaoEmDias()));
+        tarefa.setDeadline(java.time.LocalDate.now());
+        tarefa.setStatus(StatusTarefa.EM_ANDAMENTO);
+        return tarefa;
+    }
+
+
 }
+
+
 
 

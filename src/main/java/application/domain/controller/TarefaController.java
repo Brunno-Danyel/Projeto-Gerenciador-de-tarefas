@@ -30,76 +30,70 @@ public class TarefaController {
 
     @PostMapping("/tarefa")
     @ResponseStatus(HttpStatus.CREATED)
-    public void createdTask(@RequestBody @Valid TarefaDTO tarefaDto) throws MessagingException {
-         service.createdTask(tarefaDto);
+    public void criarTarefa(@RequestBody @Valid TarefaDTO tarefaDto) throws MessagingException {
+         service.criarTarefa(tarefaDto);
     }
 
     @GetMapping("/listar")
-    public List<Tarefa> listarTarefasConcluidas() {
-        List<Tarefa> list = service.listTask();
+    public List<Tarefa> listarTodasTarefas() {
+        List<Tarefa> list = service.listarTodasTarefas();
         return list;
     }
 
     @GetMapping("id/{tarefaId}")
-    public ResponseEntity<Tarefa> findByNumber(@PathVariable Long tarefaId) {
-        Tarefa tarefa = service.findById(tarefaId);
+    public ResponseEntity<Tarefa> buscarTarefaPorId(@PathVariable Long tarefaId) {
+        Tarefa tarefa = service.buscarTarefaPorId(tarefaId);
         return ResponseEntity.ok().body(tarefa);
     }
 
     @GetMapping("responsavel/{responsavel}")
-    public ResponseEntity<Optional<List<Tarefa>>> findByResponsavel(@PathVariable Usuario responsavel) {
-        Optional<List<Tarefa>> tarefa = service.searchResponsavel(responsavel);
+    public ResponseEntity<Optional<List<Tarefa>>> buscarResponsavelTarefa(@PathVariable Usuario responsavel) {
+        Optional<List<Tarefa>> tarefa = service.buscarResponsavelTarefa(responsavel);
         return ResponseEntity.ok().body(tarefa);
     }
 
 
     @GetMapping("descricao/{descricao}")
-    public ResponseEntity<List<Tarefa>> findByDescription(@PathVariable String descricao) {
-        List<Tarefa> listDescricaoTask = service.searchDescription(descricao);
+    public ResponseEntity<List<Tarefa>> buscarDescricaoTarefa(@PathVariable String descricao) {
+        List<Tarefa> listDescricaoTask = service.buscarDescricaoTarefa(descricao);
         return ResponseEntity.ok().body(listDescricaoTask);
     }
 
     @GetMapping("titulo/{titulo}")
-    public ResponseEntity<List<Tarefa>> findByTitle(@PathVariable String titulo) {
-        List<Tarefa> listTitleTask = service.searchTitle(titulo);
+    public ResponseEntity<List<Tarefa>> buscarTituloTarefa(@PathVariable String titulo) {
+        List<Tarefa> listTitleTask = service.buscarTituloTarefa(titulo);
         return ResponseEntity.ok().body(listTitleTask);
     }
 
     @GetMapping("status/{status}")
-    public ResponseEntity<List<Tarefa>> findByStatusTarefa(@PathVariable String status) {
-        List<Tarefa> listStatusTask = service.searchStatus(status);
+    public ResponseEntity<List<Tarefa>> buscarStatusTarefa(@PathVariable String status) {
+        List<Tarefa> listStatusTask = service.buscarStatusTarefa(status);
         return ResponseEntity.ok().body(listStatusTask);
     }
 
     @GetMapping("/filtro")
-    public List<Tarefa> find(Tarefa tarefa) {
-        ExampleMatcher matcher = ExampleMatcher
-                .matching()
-                .withIgnoreCase()
-                .withStringMatcher(
-                        ExampleMatcher.StringMatcher.CONTAINING);
-
-        Example example = Example.of(tarefa, matcher);
-        return repository.findAll(example);
+    public List<Tarefa> filtro(Tarefa tarefa) {
+        List<Tarefa> tarefasFiltradas = service.filtro(tarefa);
+        return tarefasFiltradas;
     }
 
     @DeleteMapping("/{tarefaId}")
-    public ResponseEntity<Void> removeTask(@PathVariable Long tarefaId) {
-        service.removeTask(tarefaId);
+    public ResponseEntity<Void> removerTarefa(@PathVariable Long tarefaId) {
+        service.removerTarefa(tarefaId);
         return ResponseEntity.noContent().build();
     }
 
     @PutMapping("/{tarefaId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public ResponseEntity<Tarefa> updateTask(@PathVariable Long tarefaId, @RequestBody @Valid TarefaDTO tarefaDTO) {
-        Tarefa tarefa = service.atualizandoTarefa(tarefaId, tarefaDTO);
+    public ResponseEntity<Tarefa> atualizarTarefa(@PathVariable Long tarefaId, @RequestBody @Valid TarefaDTO tarefaDTO) {
+        Tarefa tarefa = service.atualizarTarefa(tarefaId, tarefaDTO);
         return ResponseEntity.ok().body(tarefa);
     }
 
     @PutMapping("concluir/{tarefaId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void concluir(@PathVariable Long tarefaId) throws MessagingException {
-        service.concluir(tarefaId);
+    public void concluirTarefa(@PathVariable Long tarefaId) throws MessagingException {
+        service.concluirTarefa(tarefaId);
     }
 
 }
