@@ -21,7 +21,7 @@ public class TarefaDTO {
     private String descricao;
 
     @NotNull(message = "{campo.responsavel.obrigatorio}")
-    private Long idUsuario;
+    private Long numeroUsuario;
 
     @NotNull(message = "{campo.prioridade.obrigatorio}")
     private PrioridadeEnum prioridade;

@@ -21,7 +21,7 @@ import java.util.List;
 
 @RequiredArgsConstructor
 @RestController
-@RequestMapping("/usuarios")
+@RequestMapping("api/usuarios")
 public class UsuarioController {
 
     private final PasswordEncoder encoder;
@@ -33,7 +33,7 @@ public class UsuarioController {
     public Usuario salvar(@RequestBody @Valid UsuarioDTO usuario) {
         String senhaCriptografada = encoder.encode(usuario.getSenha());
         usuario.setSenha(senhaCriptografada);
-        return service.save(usuario);
+        return service.cadastrarUsuario(usuario);
     }
 
     @PostMapping("/auth")
@@ -51,7 +51,7 @@ public class UsuarioController {
 
     @GetMapping
     public ResponseEntity<List<Usuario>> listUser(){
-        List<Usuario> listUser = service.listUser();
+        List<Usuario> listUser = service.listarUsuarios();
         return ResponseEntity.ok().body(listUser);
     }
 

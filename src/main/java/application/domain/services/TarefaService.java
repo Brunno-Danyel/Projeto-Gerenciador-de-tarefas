@@ -37,8 +37,8 @@ public class TarefaService {
 
 
     public void criarTarefa(TarefaDTO tarefaDto) throws MessagingException {
-        Long idResponsavel = tarefaDto.getIdUsuario();
-        Usuario responsavel = userService.findById(idResponsavel);
+        Long idResponsavel = tarefaDto.getNumeroUsuario();
+        Usuario responsavel = userService.buscarUsuarioPorId(idResponsavel);
 
         Tarefa tarefa = fromDto(tarefaDto);
         verificarDataFDS(tarefa);
@@ -64,8 +64,8 @@ public class TarefaService {
             if (tarefa.getStatus().equals(StatusTarefa.CONCLUIDA)) {
                 throw new TarefaException("Impossível atualizar tarefas já CONCLUÍDAS!");
             }
-            Long idResponsavel = tarefaDTO.getIdUsuario();
-            Usuario responsavel = userService.findById(idResponsavel);
+            Long idResponsavel = tarefaDTO.getNumeroUsuario();
+            Usuario responsavel = userService.buscarUsuarioPorId(idResponsavel);
 
             tarefa.setTitulo(tarefaDTO.getTitulo());
             tarefa.setDescricao(tarefaDTO.getDescricao());

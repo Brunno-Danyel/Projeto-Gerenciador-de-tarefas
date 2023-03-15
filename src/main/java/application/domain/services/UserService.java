@@ -7,7 +7,6 @@ import application.domain.exception.UsuarioException;
 import application.domain.exception.UsuarioNaoEncontradoException;
 import application.domain.repositories.UsuarioRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -36,8 +35,8 @@ public class UserService implements UserDetailsService {
     }
 
     @Override
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        Usuario usuario = repository.findByLogin(username)
+    public UserDetails loadUserByUsername(String login) throws UsernameNotFoundException {
+        Usuario usuario = repository.findByLogin(login)
                 .orElseThrow(() -> new UsernameNotFoundException("Usuario não encontrado na base de dados"));
 
         String[] roles = usuario.isAdmin() ? new String[]{"ADMIN", "USER"} : new String[]{"USER"};
@@ -49,13 +48,13 @@ public class UserService implements UserDetailsService {
                 .roles(roles).build();
     }
 
-    public Usuario findById(Long usuarioId) {
+    public Usuario buscarUsuarioPorId(Long usuarioId) {
         return repository.findById(usuarioId)
                 .orElseThrow(() -> new UsuarioNaoEncontradoException("Usuario não encontrado"));
     }
 
     @Transactional
-    public Usuario save(UsuarioDTO usuario) {
+    public Usuario cadastrarUsuario(UsuarioDTO usuario) {
         Usuario user = usuario.fromDto(usuario);
         boolean loginEmUso = repository.findByLogin(usuario.getLogin()).stream()
                 .anyMatch(usuarioExistente -> !usuarioExistente.equals(usuario));
@@ -66,7 +65,7 @@ public class UserService implements UserDetailsService {
         return repository.save(user);
     }
 
-    public List<Usuario> listUser() {
+    public List<Usuario> listarUsuarios() {
         List users = repository.findAll();
         return users;
     }
