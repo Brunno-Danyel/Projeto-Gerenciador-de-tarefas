@@ -135,14 +135,14 @@ public class EmailService {
                             " Data prevista para a conclusão da tarefa: " + tarefa.getDataPrevistaConclusao() + "\n\n" +
                             " Data de conclusão da tarefa: " + tarefa.getDataConclusao().toString());
 
-            helper.addAttachment("narutoSorrindo.jpg", new ClassPathResource("arquivos/narutoSorrindo.jpg"));
+            helper.addAttachment("narutoJoinha.jpg", new ClassPathResource("arquivos/narutoJoinha.jpg"));
             javaMailSender.send(email);
         }
 
         if(tarefa.getStatus().equals(StatusTarefa.EM_ANDAMENTO)){
             helper.setFrom(remetente);
             helper.setTo(usuario.getLogin());
-            helper.setSubject("Envio de tarefa unitário!");
+            helper.setSubject("Envio de tarefa!");
             helper.setText(
                     "Número da tarefa: " + (tarefa.getId()) + "\n\n" +
                             "Título da Tarefa: " + tarefa.getTitulo() + " \n\n" +
