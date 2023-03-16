@@ -8,7 +8,6 @@ import application.domain.exception.TarefaException;
 import application.domain.exception.TarefaNaoEncontradaException;
 import application.domain.exception.UsuarioNaoEncontradoException;
 import application.domain.repositories.TarefaRepository;
-import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Example;
 import org.springframework.data.domain.ExampleMatcher;
@@ -28,9 +27,6 @@ public class TarefaService {
 
     @Autowired
     private UserService userService;
-
-    @Autowired
-    private ModelMapper modelMapper;
 
     @Autowired
     private EmailService emailService;

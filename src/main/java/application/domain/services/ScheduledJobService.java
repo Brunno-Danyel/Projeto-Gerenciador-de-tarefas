@@ -28,21 +28,21 @@ public class ScheduledJobService {
     @Autowired
     private EmailService emailService;
 
-    @Scheduled(cron = "0 25 10 1/1 * ?")
+    @Scheduled(cron = "0 12 14 1/1 * ?")
     private void converterTarefasAtrasadas() {
-        List<Tarefa> tarefasVerificadas = tarefaService.listarTodasTarefas().stream().map(tarefas -> {
+        tarefaService.listarTodasTarefas().stream().map(tarefas -> {
             if (tarefas.getDataPrevistaConclusao() != null && tarefas.getDataPrevistaConclusao().isBefore(LocalDate.now()) && tarefas.getDataConclusao() == null) {
                 tarefas.setStatus(StatusTarefa.ATRASADA);
             }
             tarefaRepository.save(tarefas);
             return tarefas;
         }).collect(Collectors.toList());
-        log.info("Agendamento realizado!");
+        log.info("Converção realizada com sucesso!");
     }
 
     @Scheduled(cron = "0 34 10 1/1 * ?")
     private void enviarTarefasEmAtraso() {
-        List<Tarefa> tarefasEmAtraso = tarefaService.listarTodasTarefas().stream().map(tarefas -> {
+         tarefaService.listarTodasTarefas().stream().map(tarefas -> {
             if(tarefas.getStatus().equals(StatusTarefa.ATRASADA)){
                 try {
                     emailService.envioDeEmailTarefaAtrasada(tarefas);
