@@ -3,7 +3,7 @@
 
 # Funcionalidade Usuário:
 
-1. Cadastrato de usuário informando os seguintes atributos: nome, login e senha.
+1. Cadastro de usuário informando os seguintes atributos: nome, login e senha.
 2.  Após a validação de todos os dados informados anteriormente, o sistema vai retornar as informações do Usuário (id, login, nome e senha), a senha ser apresentada de forma criptografada tal como também para o banco de dados.
 3.  Para acessar o sistema e seus endpoints o usuário em questão vai precisar fazer a autenticação informando o login e a senha.
 4.  Após a autenticação concluída, o sistema vai retornar um token de acesso onde será usado nos endpoints para a permissão dos serviços.
