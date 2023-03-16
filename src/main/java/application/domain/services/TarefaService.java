@@ -33,7 +33,7 @@ public class TarefaService {
 
 
     public void criarTarefa(TarefaDTO tarefaDto) throws MessagingException {
-        Long idResponsavel = tarefaDto.getNumeroUsuario();
+        Long idResponsavel = tarefaDto.getIdResponsavel();
         Usuario responsavel = userService.buscarUsuarioPorId(idResponsavel);
 
         Tarefa tarefa = fromDto(tarefaDto);
@@ -60,7 +60,7 @@ public class TarefaService {
             if (tarefa.getStatus().equals(StatusTarefa.CONCLUIDA)) {
                 throw new TarefaException("Impossível atualizar tarefas já CONCLUÍDAS!");
             }
-            Long idResponsavel = tarefaDTO.getNumeroUsuario();
+            Long idResponsavel = tarefaDTO.getIdResponsavel();
             Usuario responsavel = userService.buscarUsuarioPorId(idResponsavel);
 
             tarefa.setTitulo(tarefaDTO.getTitulo());
@@ -84,7 +84,11 @@ public class TarefaService {
     }
 
     public List<Tarefa> buscarStatusTarefa(String status) {
-        return repository.status(status);
+        List<Tarefa> tarefasStatus = repository.status(status);
+        if(tarefasStatus.isEmpty()){
+            throw new TarefaNaoEncontradaException("Não existe tarefas com esse STATUS no momento!");
+        }
+        return tarefasStatus;
     }
 
     public Optional<List<Tarefa>> buscarResponsavelTarefa(Usuario responsavel) {
