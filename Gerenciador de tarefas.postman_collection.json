@@ -1,0 +1,550 @@
+{
+	"info": {
+		"_postman_id": "ecb042f9-6de9-4cb7-bba5-c8bb40561f32",
+		"name": "Gerenciador de tarefas",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Tarefa",
+			"item": [
+				{
+					"name": "Tarefa - Criar",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n \"titulo\": \"\",\r\n \"descricao\": \"\",\r\n \"idResponsavel\" : \"\",\r\n \"prazoParaConclusaoEmDias\": ,\r\n \"prioridade\": \"\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:9090/api/tarefas/tarefa",
+							"host": [
+								"localhost"
+							],
+							"port": "9090",
+							"path": [
+								"api",
+								"tarefas",
+								"tarefa"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Tarefa - Buscar(Numero)",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:9090/api/tarefas/id/",
+							"host": [
+								"localhost"
+							],
+							"port": "9090",
+							"path": [
+								"api",
+								"tarefas",
+								"id",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Tarefa - Listar",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:9090/api/tarefas/listar",
+							"host": [
+								"localhost"
+							],
+							"port": "9090",
+							"path": [
+								"api",
+								"tarefas",
+								"listar"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Tarefa - Buscar(Descricao)",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:9090/api/tarefas/descricao/",
+							"host": [
+								"localhost"
+							],
+							"port": "9090",
+							"path": [
+								"api",
+								"tarefas",
+								"descricao",
+								""
+							],
+							"query": [
+								{
+									"key": "descricao",
+									"value": "busca",
+									"disabled": true
+								},
+								{
+									"key": "responsavel",
+									"value": "1",
+									"disabled": true
+								},
+								{
+									"key": "prioridade",
+									"value": "BAIXA",
+									"disabled": true
+								},
+								{
+									"key": "deadline",
+									"value": "",
+									"disabled": true
+								},
+								{
+									"key": "status",
+									"value": "",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Tarefa - Buscar(Titulo)",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:9090/api/tarefas/titulo/",
+							"host": [
+								"localhost"
+							],
+							"port": "9090",
+							"path": [
+								"api",
+								"tarefas",
+								"titulo",
+								""
+							],
+							"query": [
+								{
+									"key": "descricao",
+									"value": "busca",
+									"disabled": true
+								},
+								{
+									"key": "responsavel",
+									"value": "1",
+									"disabled": true
+								},
+								{
+									"key": "prioridade",
+									"value": "BAIXA",
+									"disabled": true
+								},
+								{
+									"key": "deadline",
+									"value": "",
+									"disabled": true
+								},
+								{
+									"key": "status",
+									"value": "",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Tarefa - Buscar (Status)",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:9090/api/tarefas/status/",
+							"host": [
+								"localhost"
+							],
+							"port": "9090",
+							"path": [
+								"api",
+								"tarefas",
+								"status",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Tarefa - Buscar(Usuario)",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:9090/api/tarefas/responsavel/",
+							"host": [
+								"localhost"
+							],
+							"port": "9090",
+							"path": [
+								"api",
+								"tarefas",
+								"responsavel",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Tarefa - Filtro",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:9090/api/tarefas/filtro",
+							"host": [
+								"localhost"
+							],
+							"port": "9090",
+							"path": [
+								"api",
+								"tarefas",
+								"filtro"
+							],
+							"query": [
+								{
+									"key": "descricao",
+									"value": "",
+									"disabled": true
+								},
+								{
+									"key": "responsavel",
+									"value": "",
+									"disabled": true
+								},
+								{
+									"key": "prioridade",
+									"value": "",
+									"disabled": true
+								},
+								{
+									"key": "deadline",
+									"value": "",
+									"disabled": true
+								},
+								{
+									"key": "status",
+									"value": "",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Tarefa - Remover",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "localhost:9090/api/tarefas/",
+							"host": [
+								"localhost"
+							],
+							"port": "9090",
+							"path": [
+								"api",
+								"tarefas",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Tarefa - Atualizar",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJicnVubm9kYW55ZWwyNXJickBob3RtYWlsLmNvbSIsImV4cCI6MTY3ODk3ODM4NX0.ooZeb9_ODVEWdp81EzhlTRH17MmHOjXKAsMvADhsUdZ_JO4_-_JpIBiqQtp1swwYAOkRJ80EUgVNfBy3kjX8Kg",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"titulo\": \"\",\r\n    \"descricao\": \"\",\r\n    \"idResponsavel\": ,\r\n    \"prazoParaConclusaoEmDias\": ,\r\n    \"prioridade\": \"\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:9090/api/tarefas/",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "9090",
+							"path": [
+								"api",
+								"tarefas",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Tarefa - Concluir",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [],
+						"url": {
+							"raw": "localhost:9090/api/tarefas/concluir/",
+							"host": [
+								"localhost"
+							],
+							"port": "9090",
+							"path": [
+								"api",
+								"tarefas",
+								"concluir",
+								""
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Usuario",
+			"item": [
+				{
+					"name": "Usuário - Cadastro",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"nome\": \"\",\r\n    \"login\": \"\",\r\n    \"senha\": \"\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:9090/api/usuarios",
+							"host": [
+								"localhost"
+							],
+							"port": "9090",
+							"path": [
+								"api",
+								"usuarios"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Usuario - Autenticação",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"login\": \"\",\r\n  \"senha\": \"\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:9090/api/usuarios/auth",
+							"host": [
+								"localhost"
+							],
+							"port": "9090",
+							"path": [
+								"api",
+								"usuarios",
+								"auth"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "E-mail",
+			"item": [
+				{
+					"name": "Email - envio",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "localhost:9090/api/email/tarefa//usuario/",
+							"host": [
+								"localhost"
+							],
+							"port": "9090",
+							"path": [
+								"api",
+								"email",
+								"tarefa",
+								"",
+								"usuario",
+								""
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}
