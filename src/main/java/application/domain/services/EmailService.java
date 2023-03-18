@@ -3,7 +3,7 @@ package application.domain.services;
 import application.domain.entities.Tarefa;
 import application.domain.entities.Usuario;
 import application.domain.enumeration.StatusTarefa;
-import lombok.RequiredArgsConstructor;
+import application.domain.model.EnvioDeEmail;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.ClassPathResource;
@@ -110,7 +110,10 @@ public class EmailService {
         javaMailSender.send(email);
     }
 
-    public void envioDeEmailUnitario(Long idTarefa, Long idUsuario) throws MessagingException {
+    public void envioDeEmailUnitario(EnvioDeEmail envioDeEmail) throws MessagingException {
+
+        Long idTarefa = envioDeEmail.getIdTarefa();
+        Long idUsuario = envioDeEmail.getIdUsuario();
 
         Usuario usuario = userService.buscarUsuarioPorId(idUsuario);
         Tarefa tarefa = tarefaService.buscarTarefaPorId(idTarefa);

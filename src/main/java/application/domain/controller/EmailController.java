@@ -1,5 +1,6 @@
 package application.domain.controller;
 
+import application.domain.model.EnvioDeEmail;
 import application.domain.services.EmailService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -14,9 +15,9 @@ public class EmailController {
     @Autowired
     private EmailService emailService;
 
-    @PostMapping("/tarefa/{idTarefa}/usuario/{idUsuario}")
+    @PostMapping("/enviar")
     @ResponseStatus(HttpStatus.OK)
-    private void envioDeEmailUnitario(@PathVariable Long idTarefa, @PathVariable Long idUsuario) throws MessagingException {
-        emailService.envioDeEmailUnitario(idTarefa, idUsuario);
+    private void envioDeEmailUnitario(@RequestBody EnvioDeEmail envioDeEmail) throws MessagingException {
+        emailService.envioDeEmailUnitario(envioDeEmail);
     }
 }
