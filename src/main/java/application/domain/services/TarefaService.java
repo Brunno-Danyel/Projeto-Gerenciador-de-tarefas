@@ -76,16 +76,25 @@ public class TarefaService {
     }
 
     public List<Tarefa> buscarDescricaoTarefa(String descricao) {
-        return repository.findByDescricao(descricao).orElseThrow(() -> new TarefaNaoEncontradaException("Descrição da tarefa não encontrada!"));
+        List<Tarefa> listaDeDescricao = repository.findByDescricao(descricao);
+        if (listaDeDescricao.isEmpty()) {
+            throw new TarefaNaoEncontradaException("Não existe tarefas com essa DESCRIÇÃO no momento!");
+
+        }
+        return listaDeDescricao;
     }
 
     public List<Tarefa> buscarTituloTarefa(String titulo) {
-        return repository.findByTitulo(titulo).orElseThrow(() -> new TarefaNaoEncontradaException("Título da tarefa não encontrado!"));
+        List<Tarefa> listaDeTitulos = repository.findByTitulo(titulo);
+        if (listaDeTitulos.isEmpty()) {
+            throw new TarefaNaoEncontradaException("Não existe tarefas com esse TÍTULO no momento!");
+        }
+        return listaDeTitulos;
     }
 
     public List<Tarefa> buscarStatusTarefa(String status) {
         List<Tarefa> tarefasStatus = repository.status(status);
-        if(tarefasStatus.isEmpty()){
+        if (tarefasStatus.isEmpty()) {
             throw new TarefaNaoEncontradaException("Não existe tarefas com esse STATUS no momento!");
         }
         return tarefasStatus;
@@ -122,7 +131,7 @@ public class TarefaService {
         return tarefa.getDataPrevistaConclusao();
     }
 
-    public List<Tarefa> filtro(Tarefa tarefa){
+    public List<Tarefa> filtro(Tarefa tarefa) {
         ExampleMatcher matcher = ExampleMatcher
                 .matching()
                 .withIgnoreCase()
