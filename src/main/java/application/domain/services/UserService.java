@@ -60,7 +60,7 @@ public class UserService implements UserDetailsService {
                 .anyMatch(usuarioExistente -> !usuarioExistente.equals(usuario));
 
         if (loginEmUso ) {
-            throw new UsuarioException("Já existe um cliente cadastrado com esse e-mail");
+            throw new UsuarioException("Já existe um usuário cadastrado com esse e-mail");
         }
         return repository.save(user);
     }
