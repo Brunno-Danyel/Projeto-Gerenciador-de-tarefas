@@ -3,7 +3,7 @@ package application.domain.services;
 import application.domain.entities.Tarefa;
 import application.domain.entities.Usuario;
 import application.domain.enumeration.StatusTarefa;
-import application.domain.model.EnvioDeEmail;
+import application.domain.dto.model.EnvioDeEmail;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.ClassPathResource;

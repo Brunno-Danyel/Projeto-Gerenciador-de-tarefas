@@ -1,6 +1,6 @@
 package application.domain.controller;
 
-import application.domain.model.EnvioDeEmail;
+import application.domain.dto.model.EnvioDeEmail;
 import application.domain.services.EmailService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
