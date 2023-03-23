@@ -1,6 +1,7 @@
 package application.domain.services;
 
 import application.domain.dto.TarefaDTO;
+import application.domain.dto.model.TarefaUpdateRequestDTO;
 import application.domain.entities.Tarefa;
 import application.domain.entities.Usuario;
 import application.domain.enumeration.StatusTarefa;
@@ -8,18 +9,22 @@ import application.domain.exception.TarefaException;
 import application.domain.exception.TarefaNaoEncontradaException;
 import application.domain.exception.UsuarioNaoEncontradoException;
 import application.domain.repositories.TarefaRepository;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Example;
 import org.springframework.data.domain.ExampleMatcher;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 
 import javax.mail.MessagingException;
+import javax.validation.Valid;
 import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
 @Service
+@Slf4j
 public class TarefaService {
 
     @Autowired
@@ -32,11 +37,12 @@ public class TarefaService {
     private EmailService emailService;
 
 
-    public void criarTarefa(TarefaDTO tarefaDto) throws MessagingException {
-        Long idResponsavel = tarefaDto.getIdResponsavel();
+    public void criarTarefa(TarefaDTO tarefaRequestDto) throws MessagingException {
+        Long idResponsavel = tarefaRequestDto.getIdResponsavel();
         Usuario responsavel = userService.buscarUsuarioPorId(idResponsavel);
 
-        Tarefa tarefa = fromDto(tarefaDto);
+
+        Tarefa tarefa = fromDto(tarefaRequestDto);
         verificarDataFDS(tarefa);
         tarefa.setResponsavel(responsavel);
 
@@ -55,7 +61,7 @@ public class TarefaService {
         repository.deleteById(tarefaId);
     }
 
-    public Tarefa atualizarTarefa(Long id, TarefaDTO tarefaDTO) {
+    public Tarefa atualizarTarefa(Long id, @Valid TarefaUpdateRequestDTO tarefaDTO) {
         return repository.findById(id).map(tarefa -> {
             if (tarefa.getStatus().equals(StatusTarefa.CONCLUIDA)) {
                 throw new TarefaException("Impossível atualizar tarefas já CONCLUÍDAS!");
@@ -63,11 +69,15 @@ public class TarefaService {
             Long idResponsavel = tarefaDTO.getIdResponsavel();
             Usuario responsavel = userService.buscarUsuarioPorId(idResponsavel);
 
-            tarefa.setTitulo(tarefaDTO.getTitulo());
-            tarefa.setDescricao(tarefaDTO.getDescricao());
-            tarefa.setPrioridade(tarefaDTO.getPrioridade());
+            String novoTitulo = StringUtils.isEmpty(tarefaDTO.getTitulo()) ? tarefa.getTitulo() : tarefaDTO.getTitulo();
+            String novaDescricao = StringUtils.isEmpty(tarefaDTO.getDescricao()) ? tarefa.getDescricao() : tarefaDTO.getDescricao();
+            LocalDate novaDataPrevistaConclusao = tarefaDTO.getPrazoParaConclusaoEmDias() != null ? tarefa.getDataPrevistaConclusao().plusDays(tarefaDTO.getPrazoParaConclusaoEmDias()) : tarefa.getDataPrevistaConclusao();
+
+            tarefa.setTitulo(novoTitulo);
+            tarefa.setDescricao(novaDescricao);
+            tarefa.setDataPrevistaConclusao(novaDataPrevistaConclusao);
             tarefa.setResponsavel(responsavel);
-            return tarefa;
+            return repository.save(tarefa);
         }).orElseThrow(() -> new TarefaNaoEncontradaException("Tarefa não encontrada!"));
     }
 
@@ -152,7 +162,6 @@ public class TarefaService {
         tarefa.setStatus(StatusTarefa.EM_ANDAMENTO);
         return tarefa;
     }
-
 
 }
 

@@ -1,13 +1,12 @@
 package application.domain.controller;
 
 import application.domain.dto.TarefaDTO;
+import application.domain.dto.model.TarefaUpdateRequestDTO;
 import application.domain.entities.Tarefa;
 import application.domain.entities.Usuario;
 import application.domain.repositories.TarefaRepository;
 import application.domain.services.TarefaService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Example;
-import org.springframework.data.domain.ExampleMatcher;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -85,7 +84,7 @@ public class TarefaController {
 
     @PutMapping("/{tarefaId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public ResponseEntity<Tarefa> atualizarTarefa(@PathVariable Long tarefaId, @RequestBody @Valid TarefaDTO tarefaDTO) {
+    public ResponseEntity<Tarefa> atualizarTarefa(@PathVariable Long tarefaId, @RequestBody @Valid TarefaUpdateRequestDTO tarefaDTO) {
         Tarefa tarefa = service.atualizarTarefa(tarefaId, tarefaDTO);
         return ResponseEntity.ok().body(tarefa);
     }

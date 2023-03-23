@@ -1,9 +1,10 @@
 package application.domain.dto.model;
 
-import application.domain.enumeration.PrioridadeEnum;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
+import javax.validation.constraints.NotNull;
 
 @Data
 @AllArgsConstructor
@@ -16,9 +17,8 @@ public class TarefaUpdateRequestDTO {
 
     private String descricao;
 
+    @NotNull(message = "{campo.responsavel.obrigatorio}")
     private Long idResponsavel;
-
-    private PrioridadeEnum prioridade;
 
     private Integer prazoParaConclusaoEmDias;
 
