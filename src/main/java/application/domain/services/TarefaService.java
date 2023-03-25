@@ -14,7 +14,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Example;
 import org.springframework.data.domain.ExampleMatcher;
 import org.springframework.stereotype.Service;
-import org.springframework.util.StringUtils;
 
 import javax.mail.MessagingException;
 import javax.validation.Valid;
@@ -69,8 +68,8 @@ public class TarefaService {
             Long idResponsavel = tarefaDTO.getIdResponsavel();
             Usuario responsavel = userService.buscarUsuarioPorId(idResponsavel);
 
-            String novoTitulo = StringUtils.isEmpty(tarefaDTO.getTitulo()) ? tarefa.getTitulo() : tarefaDTO.getTitulo();
-            String novaDescricao = StringUtils.isEmpty(tarefaDTO.getDescricao()) ? tarefa.getDescricao() : tarefaDTO.getDescricao();
+            String novoTitulo = tarefaDTO.getTitulo().isEmpty() ? tarefa.getTitulo() : tarefaDTO.getTitulo();
+            String novaDescricao = tarefaDTO.getDescricao().isEmpty() ? tarefa.getDescricao() : tarefaDTO.getDescricao();
             LocalDate novaDataPrevistaConclusao = tarefaDTO.getPrazoParaConclusaoEmDias() != null ? tarefa.getDataPrevistaConclusao().plusDays(tarefaDTO.getPrazoParaConclusaoEmDias()) : tarefa.getDataPrevistaConclusao();
 
             tarefa.setTitulo(novoTitulo);
