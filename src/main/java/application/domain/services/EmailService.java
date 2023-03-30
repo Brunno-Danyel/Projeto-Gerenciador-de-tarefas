@@ -40,17 +40,7 @@ public class EmailService {
         helper.setFrom(remetente);
         helper.setTo(responsavel.getLogin());
         helper.setSubject("Tarefa adicionada com sucesso!");
-        helper.setText(
-                //   "--> Assim como os habitantes de Konoha confiam em seu hokage, estou confiando essa tarefa a você, boa tarefa! <--" + "\n\n" +
-                "Número da tarefa: " + (tarefa.getId()) + "\n\n" +
-                        "Título da Tarefa: " + tarefa.getTitulo() + " \n\n" +
-                        " Descrição da tarefa: " + tarefa.getDescricao() + " \n\n" +
-                        " Nome do responsavel: " + tarefa.getResponsavel().getNome() + " \n\n" +
-                        " Endereço de e-mail do responsável: " + tarefa.getResponsavel().getLogin() + " \n\n" +
-                        " Status da tarefa: " + tarefa.getStatus().toString() + " \n\n" +
-                        " Prioridade da tarefa: " + tarefa.getPrioridade().toString() + " \n\n" +
-                        " Data da abertura da tarefa: " + tarefa.getDeadline().toString() + "\n\n" +
-                        " Data prevista para a conclusão da tarefa: " + tarefa.getDataPrevistaConclusao());
+        helper.setText(corpoMessagem(tarefa));
 
         helper.addAttachment("narutoSorrindo.jpg", new ClassPathResource("arquivos/narutoSorrindo.jpg"));
         javaMailSender.send(email);
@@ -66,18 +56,7 @@ public class EmailService {
         helper.setFrom(remetente);
         helper.setTo(responsavel.getLogin());
         helper.setSubject("Tarefa concluída com sucesso!");
-        helper.setText(
-                "--> Parabéns por ter concluído a tarefa! <--" + "\n\n" +
-                        "Número da tarefa: " + (tarefa.getId()) + "\n\n" +
-                        "Título da Tarefa: " + tarefa.getTitulo() + " \n\n" +
-                        " Descrição da tarefa: " + tarefa.getDescricao() + " \n\n" +
-                        " Nome do responsavel: " + tarefa.getResponsavel().getNome() + " \n\n" +
-                        " Endereço de e-mail do responsável: " + tarefa.getResponsavel().getLogin() + " \n\n" +
-                        " Status da tarefa: " + tarefa.getStatus().toString() + " \n\n" +
-                        " Prioridade da tarefa: " + tarefa.getPrioridade().toString() + " \n\n" +
-                        " Data da abertura da tarefa: " + tarefa.getDeadline().toString() + "\n\n" +
-                        " Data prevista para a conclusão da tarefa: " + tarefa.getDataPrevistaConclusao() + "\n\n" +
-                        " Data de conclusão da tarefa: " + tarefa.getDataConclusao().toString());
+        helper.setText(corpoMessagem(tarefa));
 
         helper.addAttachment("narutoJoinha.jpg", new ClassPathResource("arquivos/narutoJoinha.jpg"));
         javaMailSender.send(email);
@@ -94,17 +73,7 @@ public class EmailService {
         helper.setFrom(remetente);
         helper.setTo(responsavel.getLogin());
         helper.setSubject("Tarefa em atraso!");
-        helper.setText(
-                "--> Tarefa em Atraso, por favor concluir tarefa. <--" + "\n\n" +
-                        "Número da tarefa: " + (tarefa.getId()) + "\n\n" +
-                        "Título da Tarefa: " + tarefa.getTitulo() + " \n\n" +
-                        " Descrição da tarefa: " + tarefa.getDescricao() + " \n\n" +
-                        " Nome do responsavel: " + tarefa.getResponsavel().getNome() + " \n\n" +
-                        " Endereço de e-mail do responsável: " + tarefa.getResponsavel().getLogin() + " \n\n" +
-                        " Status da tarefa: " + tarefa.getStatus().toString() + " \n\n" +
-                        " Prioridade da tarefa: " + tarefa.getPrioridade().toString() + " \n\n" +
-                        " Data da abertura da tarefa: " + tarefa.getDeadline().toString() + "\n\n" +
-                        " Data prevista para a conclusão da tarefa: " + tarefa.getDataPrevistaConclusao());
+        helper.setText(corpoMessagem(tarefa));
 
         helper.addAttachment("narutoChateado.jpg", new ClassPathResource("arquivos/narutoChateado.jpg"));
         javaMailSender.send(email);
@@ -122,63 +91,64 @@ public class EmailService {
 
         MimeMessageHelper helper = new MimeMessageHelper(email, true);
 
-        if(tarefa.getStatus().equals(StatusTarefa.CONCLUIDA)) {
-            helper.setFrom(remetente);
-            helper.setTo(usuario.getLogin());
-            helper.setSubject("Envio de tarefa unitário!");
-            helper.setText(
-                    "Número da tarefa: " + (tarefa.getId()) + "\n\n" +
-                            "Título da Tarefa: " + tarefa.getTitulo() + " \n\n" +
-                            " Descrição da tarefa: " + tarefa.getDescricao() + " \n\n" +
-                            " Nome do responsavel: " + tarefa.getResponsavel().getNome() + " \n\n" +
-                            " Endereço de e-mail do responsável: " + tarefa.getResponsavel().getLogin() + " \n\n" +
-                            " Status da tarefa: " + tarefa.getStatus().toString() + " \n\n" +
-                            " Prioridade da tarefa: " + tarefa.getPrioridade().toString() + " \n\n" +
-                            " Data da abertura da tarefa: " + tarefa.getDeadline().toString() + "\n\n" +
-                            " Data prevista para a conclusão da tarefa: " + tarefa.getDataPrevistaConclusao() + "\n\n" +
-                            " Data de conclusão da tarefa: " + tarefa.getDataConclusao().toString());
+        helper.setFrom(remetente);
+        helper.setTo(usuario.getLogin());
+        helper.setSubject("Envio de tarefa!");
+        helper.setText(corpoMessagem(tarefa));
 
+        if(tarefa.getStatus().equals(StatusTarefa.CONCLUIDA)) {
             helper.addAttachment("narutoJoinha.jpg", new ClassPathResource("arquivos/narutoJoinha.jpg"));
-            javaMailSender.send(email);
         }
 
         if(tarefa.getStatus().equals(StatusTarefa.EM_ANDAMENTO)){
-            helper.setFrom(remetente);
-            helper.setTo(usuario.getLogin());
-            helper.setSubject("Envio de tarefa!");
-            helper.setText(
-                    "Número da tarefa: " + (tarefa.getId()) + "\n\n" +
-                            "Título da Tarefa: " + tarefa.getTitulo() + " \n\n" +
-                            " Descrição da tarefa: " + tarefa.getDescricao() + " \n\n" +
-                            " Nome do responsavel: " + tarefa.getResponsavel().getNome() + " \n\n" +
-                            " Endereço de e-mail do responsável: " + tarefa.getResponsavel().getLogin() + " \n\n" +
-                            " Status da tarefa: " + tarefa.getStatus().toString() + " \n\n" +
-                            " Prioridade da tarefa: " + tarefa.getPrioridade().toString() + " \n\n" +
-                            " Data da abertura da tarefa: " + tarefa.getDeadline().toString() + "\n\n" +
-                            " Data prevista para a conclusão da tarefa: " + tarefa.getDataPrevistaConclusao());
-
             helper.addAttachment("narutoSorrindo.jpg", new ClassPathResource("arquivos/narutoSorrindo.jpg"));
-            javaMailSender.send(email);
         }
 
         if(tarefa.getStatus().equals(StatusTarefa.ATRASADA)){
-            helper.setFrom(remetente);
-            helper.setTo(usuario.getLogin());
-            helper.setSubject("Envio de tarefa unitário!");
-            helper.setText(
-                    "--> Tarefa em Atraso, por favor concluir tarefa. <--" + "\n\n" +
-                            "Número da tarefa: " + (tarefa.getId()) + "\n\n" +
-                            "Título da Tarefa: " + tarefa.getTitulo() + " \n\n" +
-                            " Descrição da tarefa: " + tarefa.getDescricao() + " \n\n" +
-                            " Nome do responsavel: " + tarefa.getResponsavel().getNome() + " \n\n" +
-                            " Endereço de e-mail do responsável: " + tarefa.getResponsavel().getLogin() + " \n\n" +
-                            " Status da tarefa: " + tarefa.getStatus().toString() + " \n\n" +
-                            " Prioridade da tarefa: " + tarefa.getPrioridade().toString() + " \n\n" +
-                            " Data da abertura da tarefa: " + tarefa.getDeadline().toString() + "\n\n" +
-                            " Data prevista para a conclusão da tarefa: " + tarefa.getDataPrevistaConclusao());
-
             helper.addAttachment("narutoChateado.jpg", new ClassPathResource("arquivos/narutoChateado.jpg"));
-            javaMailSender.send(email);
         }
+        javaMailSender.send(email);
+    }
+
+    public String corpoMessagem(Tarefa tarefa){
+       String mensagem = new String();
+        if(tarefa.getStatus().equals(StatusTarefa.ATRASADA)) {
+             mensagem = "--> Tarefa em Atraso, por favor concluir tarefa. <--" + "\n\n" +
+                    "Número da tarefa: " + (tarefa.getId()) + "\n\n" +
+                    "Título da Tarefa: " + tarefa.getTitulo() + " \n\n" +
+                    " Descrição da tarefa: " + tarefa.getDescricao() + " \n\n" +
+                    " Nome do responsavel: " + tarefa.getResponsavel().getNome() + " \n\n" +
+                    " Endereço de e-mail do responsável: " + tarefa.getResponsavel().getLogin() + " \n\n" +
+                    " Status da tarefa: " + tarefa.getStatus().toString() + " \n\n" +
+                    " Prioridade da tarefa: " + tarefa.getPrioridade().toString() + " \n\n" +
+                    " Data da abertura da tarefa: " + tarefa.getDeadline().toString() + "\n\n" +
+                    " Data prevista para a conclusão da tarefa: " + tarefa.getDataPrevistaConclusao();
+        }
+
+        if(tarefa.getStatus().equals(StatusTarefa.EM_ANDAMENTO)){
+            mensagem = "Número da tarefa: " + (tarefa.getId()) + "\n\n" +
+                    "Título da Tarefa: " + tarefa.getTitulo() + " \n\n" +
+                    " Descrição da tarefa: " + tarefa.getDescricao() + " \n\n" +
+                    " Nome do responsavel: " + tarefa.getResponsavel().getNome() + " \n\n" +
+                    " Endereço de e-mail do responsável: " + tarefa.getResponsavel().getLogin() + " \n\n" +
+                    " Status da tarefa: " + tarefa.getStatus().toString() + " \n\n" +
+                    " Prioridade da tarefa: " + tarefa.getPrioridade().toString() + " \n\n" +
+                    " Data da abertura da tarefa: " + tarefa.getDeadline().toString() + "\n\n" +
+                    " Data prevista para a conclusão da tarefa: " + tarefa.getDataPrevistaConclusao();
+        }
+
+        if(tarefa.getStatus().equals(StatusTarefa.CONCLUIDA)){
+            mensagem = "Número da tarefa: " + (tarefa.getId()) + "\n\n" +
+                    "Título da Tarefa: " + tarefa.getTitulo() + " \n\n" +
+                    " Descrição da tarefa: " + tarefa.getDescricao() + " \n\n" +
+                    " Nome do responsavel: " + tarefa.getResponsavel().getNome() + " \n\n" +
+                    " Endereço de e-mail do responsável: " + tarefa.getResponsavel().getLogin() + " \n\n" +
+                    " Status da tarefa: " + tarefa.getStatus().toString() + " \n\n" +
+                    " Prioridade da tarefa: " + tarefa.getPrioridade().toString() + " \n\n" +
+                    " Data da abertura da tarefa: " + tarefa.getDeadline().toString() + "\n\n" +
+                    " Data prevista para a conclusão da tarefa: " + tarefa.getDataPrevistaConclusao() + "\n\n" +
+                    " Data de conclusão da tarefa: " + tarefa.getDataConclusao().toString();
+        }
+         return mensagem;
     }
 }
