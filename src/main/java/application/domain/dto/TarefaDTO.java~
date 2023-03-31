@@ -26,6 +26,7 @@ public class TarefaDTO {
     private Long idResponsavel;
 
     @NotNull(message = "{campo.prioridade.obrigatorio}")
+    @NotEmpty(message = "Campo obrigatorio")
     @JsonFormat(shape = JsonFormat.Shape.STRING)
     private PrioridadeEnum prioridade;
 

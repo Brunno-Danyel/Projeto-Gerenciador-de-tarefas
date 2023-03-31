@@ -81,7 +81,7 @@ public class TarefaService {
     }
 
     public Tarefa buscarTarefaPorId(Long tarefaId) {
-        return repository.findById(tarefaId).orElseThrow(() -> new TarefaNaoEncontradaException("Tarefa não encontrada!"));
+        return repository.findById(tarefaId).orElseThrow(() -> new TarefaNaoEncontradaException("Tarefa ID:" + tarefaId +" não encontrada!"));
     }
 
     public List<Tarefa> buscarDescricaoTarefa(String descricao) {
@@ -129,6 +129,9 @@ public class TarefaService {
 
     private LocalDate verificarDataFDS(Tarefa tarefa) {
 
+        if(tarefa.getDataPrevistaConclusao().isBefore(LocalDate.now())){
+            throw new TarefaException("A data prevista não pode ser anterior a data atual!");
+        }
         if (tarefa.getDataPrevistaConclusao().getDayOfWeek().equals(DayOfWeek.SATURDAY)) {
             LocalDate novaDataPrevista = tarefa.getDataPrevistaConclusao().plusDays(2);
             tarefa.setDataPrevistaConclusao(novaDataPrevista);
@@ -156,7 +159,7 @@ public class TarefaService {
         tarefa.setDescricao(dto.getDescricao());
         tarefa.setTitulo(dto.getTitulo());
         tarefa.setPrioridade(dto.getPrioridade());
-        tarefa.setDataPrevistaConclusao(java.time.LocalDate.now().plusDays(dto.getPrazoParaConclusaoEmDias()));
+        tarefa.setDataPrevistaConclusao(dto.getDataPrevistaConclusao());
         tarefa.setDeadline(java.time.LocalDate.now());
         tarefa.setStatus(StatusTarefa.EM_ANDAMENTO);
         return tarefa;

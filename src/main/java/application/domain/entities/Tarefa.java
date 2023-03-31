@@ -2,14 +2,15 @@ package application.domain.entities;
 
 import application.domain.enumeration.PrioridadeEnum;
 import application.domain.enumeration.StatusTarefa;
-import application.domain.exception.TarefaException;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonInclude;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.time.LocalDate;
-import java.time.OffsetDateTime;
 
 @Data
 @AllArgsConstructor
