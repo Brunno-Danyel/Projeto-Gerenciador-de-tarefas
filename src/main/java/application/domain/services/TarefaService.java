@@ -42,7 +42,7 @@ public class TarefaService {
 
 
         Tarefa tarefa = fromDto(tarefaRequestDto);
-        verificarDataFDS(tarefa);
+        verificarData(tarefa);
         tarefa.setResponsavel(responsavel);
 
         repository.save(tarefa);
@@ -70,7 +70,7 @@ public class TarefaService {
 
             String novoTitulo = tarefaDTO.getTitulo().isEmpty() ? tarefa.getTitulo() : tarefaDTO.getTitulo();
             String novaDescricao = tarefaDTO.getDescricao().isEmpty() ? tarefa.getDescricao() : tarefaDTO.getDescricao();
-            LocalDate novaDataPrevistaConclusao = tarefaDTO.getPrazoParaConclusaoEmDias() != null ? tarefa.getDataPrevistaConclusao().plusDays(tarefaDTO.getPrazoParaConclusaoEmDias()) : tarefa.getDataPrevistaConclusao();
+            LocalDate novaDataPrevistaConclusao = tarefaDTO.getDataPrevistaConclusao() == null ? tarefa.getDataPrevistaConclusao() : tarefaDTO.getDataPrevistaConclusao();
 
             tarefa.setTitulo(novoTitulo);
             tarefa.setDescricao(novaDescricao);
@@ -127,7 +127,7 @@ public class TarefaService {
         emailService.envioDeEmailTarefaConcluidaComAnexo(tarefa);
     }
 
-    private LocalDate verificarDataFDS(Tarefa tarefa) {
+    private LocalDate verificarData(Tarefa tarefa) {
 
         if(tarefa.getDataPrevistaConclusao().isBefore(LocalDate.now())){
             throw new TarefaException("A data prevista não pode ser anterior a data atual!");

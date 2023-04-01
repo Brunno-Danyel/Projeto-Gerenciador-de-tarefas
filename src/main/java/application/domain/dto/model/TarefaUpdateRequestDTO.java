@@ -5,6 +5,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.validation.constraints.NotNull;
+import java.time.LocalDate;
 
 @Data
 @AllArgsConstructor
@@ -20,6 +21,6 @@ public class TarefaUpdateRequestDTO {
     @NotNull(message = "{campo.responsavel.obrigatorio}")
     private Long idResponsavel;
 
-    private Integer prazoParaConclusaoEmDias;
+    private LocalDate dataPrevistaConclusao;
 
 }
