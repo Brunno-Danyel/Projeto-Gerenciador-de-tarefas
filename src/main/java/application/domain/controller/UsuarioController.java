@@ -49,6 +49,12 @@ public class UsuarioController {
         }
     }
 
+    @PutMapping("/admin/{idUsuario}")
+    @ResponseStatus(HttpStatus.OK)
+    public void promoverAdmin(@PathVariable Long idUsuario){
+        service.promoverAdmin(idUsuario);
+    }
+
     @GetMapping
     public ResponseEntity<List<Usuario>> listUser(){
         List<Usuario> listUser = service.listarUsuarios();

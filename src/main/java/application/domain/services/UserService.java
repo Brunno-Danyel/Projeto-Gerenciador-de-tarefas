@@ -65,6 +65,13 @@ public class UserService implements UserDetailsService {
         return repository.save(user);
     }
 
+    public void promoverAdmin(Long idUsuario){
+        Usuario usuario = repository.findById(idUsuario)
+                .orElseThrow(() -> new UsuarioNaoEncontradoException("Usuario não encontrado"));
+        usuario.setAdmin(true);
+        repository.save(usuario);
+    }
+
     public List<Usuario> listarUsuarios() {
         List users = repository.findAll();
         return users;
