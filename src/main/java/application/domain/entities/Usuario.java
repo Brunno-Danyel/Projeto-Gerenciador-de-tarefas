@@ -8,7 +8,7 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import javax.validation.constraints.Email;
-import java.io.Serializable;
+import javax.validation.constraints.NotEmpty;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -17,21 +17,24 @@ import java.util.List;
 @AllArgsConstructor
 @Builder
 @Entity
-public class Usuario implements Serializable {
-    private static final long serialVersionUID = 1L;
+public class Usuario {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Email
+    @NotEmpty(message = "{campo.login.obrigatorio}")
+    @Email(message = "{campo.login.valido}")
     @Column(name = "tb_login_usuario")
     private String login;
 
+    @NotEmpty(message = "{campo.nome.obrigatorio}")
     @Column(name = "tb_nome_usuario")
     private String nome;
 
+
     @JsonIgnore
+    @NotEmpty(message = "{campo.senha.obrigatorio}")
     @Column(name = "tb_senha_user")
     private String senha;
 

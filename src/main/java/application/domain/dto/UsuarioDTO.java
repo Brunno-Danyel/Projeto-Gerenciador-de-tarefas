@@ -24,7 +24,7 @@ public class UsuarioDTO {
     private String senha;
 
 
-    public Usuario fromDto(UsuarioDTO usuario){
+    public Usuario fromDto(UsuarioDTO usuario) {
         return new Usuario(login, nome, senha);
     }
 }

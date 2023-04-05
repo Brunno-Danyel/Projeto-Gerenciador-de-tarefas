@@ -1,11 +1,11 @@
 package application.domain.controller;
 
-import application.domain.secutiry.JwtService;
 import application.domain.dto.CredenciaisDTO;
 import application.domain.dto.TokenDTO;
 import application.domain.dto.UsuarioDTO;
 import application.domain.entities.Usuario;
 import application.domain.exception.SenhaInvalidaException;
+import application.domain.secutiry.JwtService;
 import application.domain.services.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -30,10 +30,10 @@ public class UsuarioController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public Usuario salvar(@RequestBody @Valid UsuarioDTO usuario) {
+    public void salvar(@RequestBody @Valid UsuarioDTO usuario) {
         String senhaCriptografada = encoder.encode(usuario.getSenha());
         usuario.setSenha(senhaCriptografada);
-        return service.cadastrarUsuario(usuario);
+        service.cadastrarUsuario(usuario);
     }
 
     @PostMapping("/auth")

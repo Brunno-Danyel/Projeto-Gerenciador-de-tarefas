@@ -76,7 +76,7 @@ public class TarefaController {
         return tarefasFiltradas;
     }
 
-    @DeleteMapping("/{tarefaId}")
+    @DeleteMapping("remover/{tarefaId}")
     public ResponseEntity<Void> removerTarefa(@PathVariable Long tarefaId) {
         service.removerTarefa(tarefaId);
         return ResponseEntity.noContent().build();
