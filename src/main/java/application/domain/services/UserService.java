@@ -15,6 +15,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @Service
@@ -54,22 +55,27 @@ public class UserService implements UserDetailsService {
     }
 
     @Transactional
-    public Usuario cadastrarUsuario(UsuarioDTO usuario) {
+    public void cadastrarUsuario(@Valid UsuarioDTO usuario) {
         Usuario user = usuario.fromDto(usuario);
         boolean loginEmUso = repository.findByLogin(usuario.getLogin()).stream()
                 .anyMatch(usuarioExistente -> !usuarioExistente.equals(usuario));
 
-        if (loginEmUso ) {
+        if (loginEmUso) {
             throw new UsuarioException("Já existe um usuário cadastrado com esse e-mail");
         }
-        return repository.save(user);
+        repository.save(user);
     }
 
-    public void promoverAdmin(Long idUsuario){
-        Usuario usuario = repository.findById(idUsuario)
-                .orElseThrow(() -> new UsuarioNaoEncontradoException("Usuario não encontrado"));
-        usuario.setAdmin(true);
-        repository.save(usuario);
+    public void promoverAdmin(Long idUsuario) {
+        Usuario usuario = repository.findById(idUsuario).map(user -> {
+            if (user.isAdmin() == true) {
+                throw new UsuarioException("Usuario " + idUsuario + " já é admin!");
+            }
+
+            user.setAdmin(true);
+            repository.save(user);
+            return user;
+        }).orElseThrow(() -> new UsuarioNaoEncontradoException("Usuario não encontrado"));
     }
 
     public List<Usuario> listarUsuarios() {
