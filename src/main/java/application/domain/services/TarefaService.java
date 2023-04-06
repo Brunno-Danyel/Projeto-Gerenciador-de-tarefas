@@ -20,7 +20,6 @@ import javax.validation.Valid;
 import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 @Slf4j
@@ -76,6 +75,7 @@ public class TarefaService {
             tarefa.setDescricao(novaDescricao);
             tarefa.setDataPrevistaConclusao(novaDataPrevistaConclusao);
             tarefa.setResponsavel(responsavel);
+            verificarData(tarefa);
             return repository.save(tarefa);
         }).orElseThrow(() -> new TarefaNaoEncontradaException("Tarefa não encontrada!"));
     }
