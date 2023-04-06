@@ -7,7 +7,6 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 import java.util.List;
-import java.util.Optional;
 
 public interface TarefaRepository extends JpaRepository<Tarefa, Long> {
 
@@ -21,5 +20,5 @@ public interface TarefaRepository extends JpaRepository<Tarefa, Long> {
     @Query(value = "select * from tarefa t join usuario u on t.tb_id_user = u.id  where t.tb_status like %:status%", nativeQuery = true)
     List<Tarefa> status(@Param(value = "status") String status);
 
-    Optional<List<Tarefa>> findByResponsavel(Usuario responsavel);
+    List<Tarefa> findByResponsavel(Usuario responsavel);
 }

@@ -109,9 +109,15 @@ public class TarefaService {
         return tarefasStatus;
     }
 
-    public Optional<List<Tarefa>> buscarResponsavelTarefa(Usuario responsavel) {
-        return Optional.ofNullable(repository.findByResponsavel(responsavel)
-                .orElseThrow(() -> new UsuarioNaoEncontradoException("Responsavel da tarefa não encontrado!")));
+    public List<Tarefa> buscarResponsavelTarefa(Usuario responsavel) {
+         if(responsavel == null){
+             throw new UsuarioNaoEncontradoException("Responsável não encontrado!");
+         }
+         List<Tarefa> tarefas = repository.findByResponsavel(responsavel);
+         if(tarefas == null || tarefas.isEmpty()){
+             throw new TarefaNaoEncontradaException("Esse responsável não possui tarefas!");
+         }
+        return tarefas;
     }
 
     public void concluirTarefa(Long tarefaId) throws MessagingException {
