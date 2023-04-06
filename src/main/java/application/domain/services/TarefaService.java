@@ -166,7 +166,7 @@ public class TarefaService {
         tarefa.setTitulo(dto.getTitulo());
         tarefa.setPrioridade(dto.getPrioridade());
         tarefa.setDataPrevistaConclusao(dto.getDataPrevistaConclusao());
-        tarefa.setDeadline(java.time.LocalDate.now());
+        tarefa.setDataAbertura(LocalDate.now());
         tarefa.setStatus(StatusTarefa.EM_ANDAMENTO);
         return tarefa;
     }

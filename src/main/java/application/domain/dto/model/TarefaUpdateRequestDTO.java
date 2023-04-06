@@ -1,5 +1,6 @@
 package application.domain.dto.model;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -21,6 +22,7 @@ public class TarefaUpdateRequestDTO {
     @NotNull(message = "{campo.responsavel.obrigatorio}")
     private Long idResponsavel;
 
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy", locale = "pt-BR", timezone = "Brazil/East")
     private LocalDate dataPrevistaConclusao;
 
 }

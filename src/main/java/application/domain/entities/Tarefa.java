@@ -40,8 +40,8 @@ public class Tarefa {
     private PrioridadeEnum prioridade;
 
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy", locale = "pt-BR", timezone = "Brazil/East")
-    @Column(name = "tb_data_tarefa")
-    private LocalDate deadline;
+    @Column(name = "tb_data_abertura_tarefa")
+    private LocalDate dataAbertura;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "tb_status")

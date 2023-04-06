@@ -121,7 +121,7 @@ public class EmailService {
                     " Endereço de e-mail do responsável: " + tarefa.getResponsavel().getLogin() + " \n\n" +
                     " Status da tarefa: " + tarefa.getStatus().toString() + " \n\n" +
                     " Prioridade da tarefa: " + tarefa.getPrioridade().toString() + " \n\n" +
-                    " Data da abertura da tarefa: " + tarefa.getDeadline().toString() + "\n\n" +
+                    " Data da abertura da tarefa: " + tarefa.getDataAbertura().toString() + "\n\n" +
                     " Data prevista para a conclusão da tarefa: " + tarefa.getDataPrevistaConclusao();
         }
 
@@ -133,7 +133,7 @@ public class EmailService {
                     " Endereço de e-mail do responsável: " + tarefa.getResponsavel().getLogin() + " \n\n" +
                     " Status da tarefa: " + tarefa.getStatus().toString() + " \n\n" +
                     " Prioridade da tarefa: " + tarefa.getPrioridade().toString() + " \n\n" +
-                    " Data da abertura da tarefa: " + tarefa.getDeadline().toString() + "\n\n" +
+                    " Data da abertura da tarefa: " + tarefa.getDataAbertura().toString() + "\n\n" +
                     " Data prevista para a conclusão da tarefa: " + tarefa.getDataPrevistaConclusao();
         }
 
@@ -145,7 +145,7 @@ public class EmailService {
                     " Endereço de e-mail do responsável: " + tarefa.getResponsavel().getLogin() + " \n\n" +
                     " Status da tarefa: " + tarefa.getStatus().toString() + " \n\n" +
                     " Prioridade da tarefa: " + tarefa.getPrioridade().toString() + " \n\n" +
-                    " Data da abertura da tarefa: " + tarefa.getDeadline().toString() + "\n\n" +
+                    " Data da abertura da tarefa: " + tarefa.getDataAbertura().toString() + "\n\n" +
                     " Data prevista para a conclusão da tarefa: " + tarefa.getDataPrevistaConclusao() + "\n\n" +
                     " Data de conclusão da tarefa: " + tarefa.getDataConclusao().toString();
         }
