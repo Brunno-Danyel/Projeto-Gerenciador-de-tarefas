@@ -1,6 +1,7 @@
 package application.domain.controller;
 
 import application.domain.dto.TarefaDTO;
+import application.domain.dto.model.TarefaResponseDTO;
 import application.domain.dto.model.TarefaUpdateRequestDTO;
 import application.domain.entities.Tarefa;
 import application.domain.entities.Usuario;
@@ -33,15 +34,15 @@ public class TarefaController {
     }
 
     @GetMapping("/listar")
-    public List<Tarefa> listarTodasTarefas() {
-        List<Tarefa> list = service.listarTodasTarefas();
-        return list;
+    public List<TarefaResponseDTO> listarTodasTarefas() {
+        List<TarefaResponseDTO> tarefaResponseDTOList = service.listarTodasTarefas();
+        return tarefaResponseDTOList;
     }
 
     @GetMapping("id/{tarefaId}")
-    public ResponseEntity<Tarefa> buscarTarefaPorId(@PathVariable Long tarefaId) {
-        Tarefa tarefa = service.buscarTarefaPorId(tarefaId);
-        return ResponseEntity.ok().body(tarefa);
+    public ResponseEntity<TarefaResponseDTO> buscarTarefaPorId(@PathVariable Long tarefaId) {
+        TarefaResponseDTO tarefaResponseDTO = service.buscarTarefaPorId(tarefaId);
+        return ResponseEntity.ok().body(tarefaResponseDTO);
     }
 
     @GetMapping("responsavel/{responsavel}")
@@ -52,20 +53,20 @@ public class TarefaController {
 
 
     @GetMapping("descricao/{descricao}")
-    public ResponseEntity<List<Tarefa>> buscarDescricaoTarefa(@PathVariable String descricao) {
-        List<Tarefa> listDescricaoTask = service.buscarDescricaoTarefa(descricao);
+    public ResponseEntity<List<TarefaResponseDTO>> buscarDescricaoTarefa(@PathVariable String descricao) {
+        List<TarefaResponseDTO> listDescricaoTask = service.buscarDescricaoTarefa(descricao);
         return ResponseEntity.ok().body(listDescricaoTask);
     }
 
     @GetMapping("titulo/{titulo}")
-    public ResponseEntity<List<Tarefa>> buscarTituloTarefa(@PathVariable String titulo) {
-        List<Tarefa> listTitleTask = service.buscarTituloTarefa(titulo);
+    public ResponseEntity<List<TarefaResponseDTO>> buscarTituloTarefa(@PathVariable String titulo) {
+        List<TarefaResponseDTO> listTitleTask = service.buscarTituloTarefa(titulo);
         return ResponseEntity.ok().body(listTitleTask);
     }
 
     @GetMapping("status/{status}")
-    public ResponseEntity<List<Tarefa>> buscarStatusTarefa(@PathVariable String status) {
-        List<Tarefa> listStatusTask = service.buscarStatusTarefa(status);
+    public ResponseEntity<List<TarefaResponseDTO>> buscarStatusTarefa(@PathVariable String status) {
+        List<TarefaResponseDTO> listStatusTask = service.buscarStatusTarefa(status);
         return ResponseEntity.ok().body(listStatusTask);
     }
 
