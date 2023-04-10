@@ -36,17 +36,15 @@ public class ScheduledJobService {
         log.info("Converção realizada com sucesso!");
     }
 
-    @Scheduled(cron = "0 36 10 1/1 * ?")
+    @Scheduled(cron = "0 15 11 1/1 * ?")
     private void enviarTarefasEmAtraso() {
-        tarefaRepository.findAll().stream().map(tarefas -> {
-            if (tarefas.getStatus().equals(StatusTarefa.ATRASADA)) {
-                try {
-                    emailService.envioDeEmailTarefaAtrasada(tarefas);
-                } catch (MessagingException e) {
-                    throw new RuntimeException(e);
-                }
+        tarefaRepository.findAll().stream().filter(tarefa -> tarefa.getStatus().equals(StatusTarefa.ATRASADA)).map(tarefa -> {
+            try {
+                emailService.envioDeEmailTarefaAtrasada(tarefa);
+            } catch (MessagingException e) {
+                throw new RuntimeException(e);
             }
-            return tarefas;
+            return tarefa;
         }).collect(Collectors.toList());
         log.info("E-mail enviado com sucesso!");
     }
