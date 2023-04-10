@@ -1,9 +1,11 @@
 package application.domain.services;
 
+import application.domain.dto.model.EnvioDeEmail;
 import application.domain.entities.Tarefa;
 import application.domain.entities.Usuario;
 import application.domain.enumeration.StatusTarefa;
-import application.domain.dto.model.EnvioDeEmail;
+import application.domain.exception.TarefaNaoEncontradaException;
+import application.domain.repositories.TarefaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.ClassPathResource;
@@ -24,7 +26,7 @@ public class EmailService {
     private UserService userService;
 
     @Autowired
-    private TarefaService tarefaService;
+    private TarefaRepository tarefaRepository;
 
     @Value("${spring.mail.username}")
     private String remetente;
@@ -85,7 +87,7 @@ public class EmailService {
         Long idUsuario = envioDeEmail.getIdUsuario();
 
         Usuario usuario = userService.buscarUsuarioPorId(idUsuario);
-        Tarefa tarefa = tarefaService.buscarTarefaPorId(idTarefa);
+        Tarefa tarefa = tarefaRepository.findById(idTarefa).orElseThrow(() -> new TarefaNaoEncontradaException("Tarefa ID:" + idTarefa + " não encontrada!"));
 
         MimeMessage email = javaMailSender.createMimeMessage();
 

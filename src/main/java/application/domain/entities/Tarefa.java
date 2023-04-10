@@ -47,8 +47,8 @@ public class Tarefa {
     @Column(name = "tb_status")
     private StatusTarefa status;
 
-    @JsonInclude(JsonInclude.Include.NON_NULL)
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy", locale = "pt-BR", timezone = "Brazil/East")
+    @JsonInclude(JsonInclude.Include.NON_NULL)
     @Column(name = "tb_data_conclusao_tarefa")
     private LocalDate dataConclusao;
 
