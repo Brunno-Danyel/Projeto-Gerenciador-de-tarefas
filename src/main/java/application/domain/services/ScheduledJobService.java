@@ -1,6 +1,7 @@
 package application.domain.services;
 
 import application.domain.enumeration.StatusTarefa;
+import application.domain.exception.EmailException;
 import application.domain.repositories.TarefaRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -42,7 +43,7 @@ public class ScheduledJobService {
             try {
                 emailService.envioDeEmailTarefaAtrasada(tarefa);
             } catch (MessagingException e) {
-                throw new RuntimeException(e);
+                throw new EmailException();
             }
             return tarefa;
         }).collect(Collectors.toList());

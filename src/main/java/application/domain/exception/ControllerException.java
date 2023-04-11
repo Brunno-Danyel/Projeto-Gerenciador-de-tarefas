@@ -41,6 +41,13 @@ public class ControllerException {
         return new ApiErrors(mensagemErro);
     }
 
+    @ExceptionHandler(EmailException.class)
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+    public ApiErrors handleRegraNegocioException(EmailException ex) {
+        String mensagemErro = ex.getMessage();
+        return new ApiErrors(mensagemErro);
+    }
+
     @ExceptionHandler(MethodArgumentNotValidException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public ApiErrors handleMethodNotValidException(MethodArgumentNotValidException ex) {
