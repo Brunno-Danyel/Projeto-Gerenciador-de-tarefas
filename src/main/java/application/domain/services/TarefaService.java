@@ -29,6 +29,10 @@ import java.util.stream.Collectors;
 @Slf4j
 public class TarefaService {
 
+    public static final int DAYS_TO_ADD_SATURDAY = 2;
+
+    public static final int DAYS_TO_ADD_SUNDAY = 1;
+
     @Autowired
     private TarefaRepository repository;
 
@@ -149,11 +153,11 @@ public class TarefaService {
             throw new TarefaException("A data prevista não pode ser anterior a data atual!");
         }
         if (tarefa.getDataPrevistaConclusao().getDayOfWeek().equals(DayOfWeek.SATURDAY)) {
-            LocalDate novaDataPrevista = tarefa.getDataPrevistaConclusao().plusDays(2);
+            LocalDate novaDataPrevista = tarefa.getDataPrevistaConclusao().plusDays(DAYS_TO_ADD_SATURDAY);
             tarefa.setDataPrevistaConclusao(novaDataPrevista);
         }
         if (tarefa.getDataPrevistaConclusao().getDayOfWeek().equals(DayOfWeek.SUNDAY)) {
-            LocalDate novaDataPrevista = tarefa.getDataPrevistaConclusao().plusDays(1);
+            LocalDate novaDataPrevista = tarefa.getDataPrevistaConclusao().plusDays(DAYS_TO_ADD_SUNDAY);
             tarefa.setDataPrevistaConclusao(novaDataPrevista);
         }
         return tarefa.getDataPrevistaConclusao();
