@@ -39,7 +39,7 @@ public class Usuario {
     private String senha;
 
     @JsonIgnore
-    @OneToMany(mappedBy = "responsavel")
+    @ManyToMany(mappedBy = "responsavel")
     private List<Tarefa> tarefa = new ArrayList<>();
 
     @JsonIgnore

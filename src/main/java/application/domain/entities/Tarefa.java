@@ -11,6 +11,8 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
 @Data
 @AllArgsConstructor
@@ -30,9 +32,11 @@ public class Tarefa {
     @Column(name = "tb_descricao_tarefa")
     private String descricao;
 
-    @ManyToOne
-    @JoinColumn(name = "tb_id_user")
-    private Usuario responsavel;
+    @ManyToMany
+    @JoinTable(name = "tarefa_responsavel",
+            joinColumns = @JoinColumn(name = "tarefa_id"),
+            inverseJoinColumns = @JoinColumn(name = "responsavel_id"))
+    private List<Usuario> responsavel = new ArrayList<>();
 
     @Column(name = "tb_prioridade_tarefa")
     @JsonFormat(shape = JsonFormat.Shape.STRING)
