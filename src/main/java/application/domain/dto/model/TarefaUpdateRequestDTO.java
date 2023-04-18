@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 
 import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
+import java.util.List;
 
 @Data
 @AllArgsConstructor
@@ -20,7 +21,7 @@ public class TarefaUpdateRequestDTO {
     private String descricao;
 
     @NotNull(message = "{campo.responsavel.obrigatorio}")
-    private Long idResponsavel;
+    private List<Long> idResponsavel;
 
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy", locale = "pt-BR", timezone = "Brazil/East")
     private LocalDate dataPrevistaConclusao;

@@ -8,6 +8,7 @@ import lombok.Setter;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
+import java.util.List;
 
 
 @Getter
@@ -23,7 +24,7 @@ public class TarefaDTO {
     private String descricao;
 
     @NotNull(message = "{campo.responsavel.obrigatorio}")
-    private Long idResponsavel;
+    private List<Long> idResponsavel;
 
     @NotNull(message = "{campo.prioridade.obrigatorio}")
     @JsonFormat(shape = JsonFormat.Shape.STRING)
