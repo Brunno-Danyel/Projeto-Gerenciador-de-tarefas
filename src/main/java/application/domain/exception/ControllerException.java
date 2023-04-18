@@ -41,6 +41,13 @@ public class ControllerException {
         return new ApiErrors(mensagemErro);
     }
 
+    @ExceptionHandler(SenhaInvalidaException.class)
+    @ResponseStatus(HttpStatus.UNAUTHORIZED)
+    public ApiErrors handleRegraNegocioException(SenhaInvalidaException ex) {
+        String mensagemErro = ex.getMessage();
+        return new ApiErrors(mensagemErro);
+    }
+
     @ExceptionHandler(EmailException.class)
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     public ApiErrors handleRegraNegocioException(EmailException ex) {
