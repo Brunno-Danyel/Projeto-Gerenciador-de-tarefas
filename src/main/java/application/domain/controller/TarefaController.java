@@ -1,6 +1,7 @@
 package application.domain.controller;
 
 import application.domain.dto.TarefaDTO;
+import application.domain.dto.model.TarefaRequestDTO;
 import application.domain.dto.model.TarefaResponseDTO;
 import application.domain.dto.model.TarefaUpdateRequestDTO;
 import application.domain.entities.Tarefa;
@@ -33,6 +34,12 @@ public class TarefaController {
          service.criarTarefa(tarefaDto);
     }
 
+    @PostMapping("/tarefa/todos")
+    @ResponseStatus(HttpStatus.CREATED)
+    public void criarTarefaParaTodos(@RequestBody @Valid TarefaRequestDTO tarefaDto) throws MessagingException {
+        service.cadastrarTarefaParaTodos(tarefaDto);
+    }
+
     @GetMapping("/listar")
     public List<TarefaResponseDTO> listarTodasTarefas() {
         List<TarefaResponseDTO> tarefaResponseDTOList = service.listarTodasTarefas();
@@ -46,8 +53,8 @@ public class TarefaController {
     }
 
     @GetMapping("responsavel/{responsavel}")
-    public ResponseEntity<List<Tarefa>> buscarResponsavelTarefa(@PathVariable Usuario responsavel) {
-        List<Tarefa> tarefa = service.buscarResponsavelTarefa(responsavel);
+    public ResponseEntity<List<TarefaResponseDTO>> buscarResponsavelTarefa(@PathVariable Usuario responsavel) {
+        List<TarefaResponseDTO> tarefa = service.buscarResponsavelTarefa(responsavel);
         return ResponseEntity.ok().body(tarefa);
     }
 
