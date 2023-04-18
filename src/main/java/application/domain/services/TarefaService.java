@@ -51,14 +51,28 @@ public class TarefaService {
     private ModelMapper modelMapper;
 
     public void criarTarefa(TarefaDTO tarefaRequestDto) throws MessagingException {
-        Long idResponsavel = tarefaRequestDto.getIdResponsavel();
-        Usuario responsavel = userService.buscarUsuarioPorId(idResponsavel);
-
-
         Tarefa tarefa = fromDto(tarefaRequestDto);
+        List<Usuario> listaResponsavel = new ArrayList<>();
+        for (Long idResponsavel : tarefaRequestDto.getIdResponsavel()) {
+            Usuario responsavel = usuarioRepository.findById(idResponsavel)
+                    .orElseThrow(() -> new UsuarioNaoEncontradoException("Usuário " + idResponsavel + " não econtrado!"));
+            userService.verificaQuantidadeDeTarefasParaUsuario(responsavel);
+            responsavel.getTarefa().add(tarefa);
+            listaResponsavel.add(responsavel);
+        }
+        if (listaResponsavel.size() > QUANTIDADE_USUARIOS_PERMITIDOS) {
+            throw new TarefaException("A tarefa só pode ter até 4 responsáveis!");
+        }
+        tarefa.setResponsavel(listaResponsavel);
         verificarData(tarefa);
-        tarefa.setResponsavel(responsavel);
+        repository.save(tarefa);
+        emailService.envioDeEmailComAnexo(tarefa);
+    }
 
+    public void cadastrarTarefaParaTodos(TarefaRequestDTO tarefaRequestDTO) throws MessagingException {
+        Tarefa tarefa = requestDto(tarefaRequestDTO);
+        List<Usuario> responsaveis = usuarioRepository.findAll();
+        tarefa.setResponsavel(responsaveis);
         repository.save(tarefa);
         emailService.envioDeEmailComAnexo(tarefa);
     }
@@ -74,13 +88,19 @@ public class TarefaService {
         repository.deleteById(tarefaId);
     }
 
-    public Tarefa atualizarTarefa(Long id, @Valid TarefaUpdateRequestDTO tarefaDTO) {
+    public Tarefa atualizarTarefa(Long id, TarefaUpdateRequestDTO tarefaDTO) {
         return repository.findById(id).map(tarefa -> {
             if (tarefa.getStatus().equals(StatusTarefa.CONCLUIDA)) {
                 throw new TarefaException("Impossível atualizar tarefas já CONCLUÍDAS!");
             }
-            Long idResponsavel = tarefaDTO.getIdResponsavel();
-            Usuario responsavel = userService.buscarUsuarioPorId(idResponsavel);
+            List<Usuario> listaResponsavel = new ArrayList<>();
+            for (Long idResponsavel : tarefaDTO.getIdResponsavel()) {
+                Usuario responsavel = usuarioRepository.findById(idResponsavel)
+                        .orElseThrow(() -> new UsuarioNaoEncontradoException("Usuário " + idResponsavel + " não econtrado!"));
+                userService.verificaQuantidadeDeTarefasParaUsuario(responsavel);
+                responsavel.getTarefa().add(tarefa);
+                listaResponsavel.add(responsavel);
+            }
 
             String novoTitulo = tarefaDTO.getTitulo().isEmpty() ? tarefa.getTitulo() : tarefaDTO.getTitulo();
             String novaDescricao = tarefaDTO.getDescricao().isEmpty() ? tarefa.getDescricao() : tarefaDTO.getDescricao();
@@ -89,7 +109,7 @@ public class TarefaService {
             tarefa.setTitulo(novoTitulo);
             tarefa.setDescricao(novaDescricao);
             tarefa.setDataPrevistaConclusao(novaDataPrevistaConclusao);
-            tarefa.setResponsavel(responsavel);
+            tarefa.setResponsavel(listaResponsavel);
             verificarData(tarefa);
             return repository.save(tarefa);
         }).orElseThrow(() -> new TarefaNaoEncontradaException("Tarefa não encontrada!"));
@@ -128,11 +148,12 @@ public class TarefaService {
         return listaTarefasStatus;
     }
 
-    public List<Tarefa> buscarResponsavelTarefa(Usuario responsavel) {
+    public List<TarefaResponseDTO> buscarResponsavelTarefa(Usuario responsavel) {
         if (responsavel == null) {
             throw new UsuarioNaoEncontradoException("Responsável não encontrado!");
         }
-        List<Tarefa> tarefas = repository.findByResponsavel(responsavel);
+        List<TarefaResponseDTO> tarefas = repository.findByResponsavel(responsavel).stream()
+                .map(this::converterParaTarefaResponse).collect(Collectors.toList());
         if (tarefas == null || tarefas.isEmpty()) {
             throw new TarefaNaoEncontradaException("Esse responsável não possui tarefas!");
         }
@@ -158,11 +179,11 @@ public class TarefaService {
             throw new TarefaException("A data prevista não pode ser anterior a data atual!");
         }
         if (tarefa.getDataPrevistaConclusao().getDayOfWeek().equals(DayOfWeek.SATURDAY)) {
-            LocalDate novaDataPrevista = tarefa.getDataPrevistaConclusao().plusDays(DAYS_TO_ADD_SATURDAY);
+            LocalDate novaDataPrevista = tarefa.getDataPrevistaConclusao().plusDays(SOMA_PARA_DIA_SABADO);
             tarefa.setDataPrevistaConclusao(novaDataPrevista);
         }
         if (tarefa.getDataPrevistaConclusao().getDayOfWeek().equals(DayOfWeek.SUNDAY)) {
-            LocalDate novaDataPrevista = tarefa.getDataPrevistaConclusao().plusDays(DAYS_TO_ADD_SUNDAY);
+            LocalDate novaDataPrevista = tarefa.getDataPrevistaConclusao().plusDays(SOMA_PARA_DIA_DOMINGO);
             tarefa.setDataPrevistaConclusao(novaDataPrevista);
         }
         return tarefa.getDataPrevistaConclusao();
@@ -190,13 +211,27 @@ public class TarefaService {
         return tarefa;
     }
 
+    public static Tarefa requestDto(TarefaRequestDTO dto) {
+        Tarefa tarefa = new Tarefa();
+        tarefa.setDescricao(dto.getDescricao());
+        tarefa.setTitulo(dto.getTitulo());
+        tarefa.setPrioridade(dto.getPrioridade());
+        tarefa.setDataPrevistaConclusao(dto.getDataPrevistaConclusao());
+        tarefa.setDataAbertura(LocalDate.now());
+        tarefa.setStatus(StatusTarefa.EM_ANDAMENTO);
+        return tarefa;
+    }
+
     private TarefaResponseDTO converterParaTarefaResponse(Tarefa tarefa) {
-        Usuario responsavel = tarefa.getResponsavel();
-        UsuarioResponseDTO usuarioResponseDTO = modelMapper.map(responsavel, UsuarioResponseDTO.class);
+        List<UsuarioResponseDTO> listaResponsavel = tarefa.getResponsavel().stream().map(responsavel -> {
+            UsuarioResponseDTO usuarioResponseDTO = modelMapper.map(responsavel, UsuarioResponseDTO.class);
+            return usuarioResponseDTO;
+        }).collect(Collectors.toList());
         TarefaResponseDTO tarefaResponseDTO = modelMapper.map(tarefa, TarefaResponseDTO.class);
-        tarefaResponseDTO.setResponsavel(usuarioResponseDTO);
+        tarefaResponseDTO.setResponsavel(listaResponsavel);
         return tarefaResponseDTO;
     }
+
 
 }
 
