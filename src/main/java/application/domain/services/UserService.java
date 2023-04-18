@@ -1,10 +1,13 @@
 package application.domain.services;
 
 import application.domain.dto.UsuarioDTO;
+import application.domain.entities.Tarefa;
 import application.domain.entities.Usuario;
+import application.domain.enumeration.StatusTarefa;
 import application.domain.exception.SenhaInvalidaException;
 import application.domain.exception.UsuarioException;
 import application.domain.exception.UsuarioNaoEncontradoException;
+import application.domain.repositories.TarefaRepository;
 import application.domain.repositories.UsuarioRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.User;
@@ -17,14 +20,19 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.validation.Valid;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class UserService implements UserDetailsService {
+    public static final int QUANTIDADE_TAREFA = 3;
     @Autowired
     private UsuarioRepository repository;
 
     @Autowired
     private PasswordEncoder passwordEncoder;
+
+    @Autowired
+    private TarefaRepository tarefaRepository;
 
     public UserDetails autenticar(Usuario usuario) {
         UserDetails user = loadUserByUsername(usuario.getLogin());
@@ -81,6 +89,14 @@ public class UserService implements UserDetailsService {
     public List<Usuario> listarUsuarios() {
         List users = repository.findAll();
         return users;
+    }
+
+    public void verificaQuantidadeDeTarefasParaUsuario(Usuario usuario) {
+        List<Tarefa> listaDeTarefasEmAndamento = usuario.getTarefa().stream()
+                .filter(tarefa -> tarefa.getStatus().equals(StatusTarefa.EM_ANDAMENTO) || tarefa.getStatus().equals(StatusTarefa.ATRASADA)).collect(Collectors.toList());
+        if (listaDeTarefasEmAndamento.size() > QUANTIDADE_TAREFA) {
+            throw new UsuarioException("Usuário " + usuario.getNome() + " já tem o número máximo de tarefas em andamento!");
+        }
     }
 
 }
