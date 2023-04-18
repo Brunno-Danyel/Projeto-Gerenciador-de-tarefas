@@ -1,6 +1,7 @@
 package application.domain.services;
 
 import application.domain.dto.TarefaDTO;
+import application.domain.dto.model.TarefaRequestDTO;
 import application.domain.dto.model.TarefaResponseDTO;
 import application.domain.dto.model.TarefaUpdateRequestDTO;
 import application.domain.dto.model.UsuarioResponseDTO;
@@ -11,6 +12,7 @@ import application.domain.exception.TarefaException;
 import application.domain.exception.TarefaNaoEncontradaException;
 import application.domain.exception.UsuarioNaoEncontradoException;
 import application.domain.repositories.TarefaRepository;
+import application.domain.repositories.UsuarioRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,9 +21,9 @@ import org.springframework.data.domain.ExampleMatcher;
 import org.springframework.stereotype.Service;
 
 import javax.mail.MessagingException;
-import javax.validation.Valid;
 import java.time.DayOfWeek;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -29,12 +31,15 @@ import java.util.stream.Collectors;
 @Slf4j
 public class TarefaService {
 
-    public static final int DAYS_TO_ADD_SATURDAY = 2;
-
-    public static final int DAYS_TO_ADD_SUNDAY = 1;
+    public static final int SOMA_PARA_DIA_SABADO = 2;
+    public static final int SOMA_PARA_DIA_DOMINGO = 1;
+    public static final int QUANTIDADE_USUARIOS_PERMITIDOS = 4;
 
     @Autowired
     private TarefaRepository repository;
+
+    @Autowired
+    private UsuarioRepository usuarioRepository;
 
     @Autowired
     private UserService userService;
