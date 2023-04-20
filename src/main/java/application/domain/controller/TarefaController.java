@@ -91,8 +91,8 @@ public class TarefaController {
 
     @PutMapping("/{tarefaId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public ResponseEntity<Tarefa> atualizarTarefa(@PathVariable Long tarefaId, @RequestBody @Valid TarefaUpdateRequestDTO tarefaDTO) {
-        Tarefa tarefa = service.atualizarTarefa(tarefaId, tarefaDTO);
+    public ResponseEntity<TarefaResponseDTO> atualizarTarefa(@PathVariable Long tarefaId, @RequestBody @Valid TarefaUpdateRequestDTO tarefaDTO) {
+        TarefaResponseDTO tarefa = service.atualizarTarefa(tarefaId, tarefaDTO);
         return ResponseEntity.ok().body(tarefa);
     }
 

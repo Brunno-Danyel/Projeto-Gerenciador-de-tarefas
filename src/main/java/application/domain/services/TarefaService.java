@@ -23,7 +23,6 @@ import org.springframework.stereotype.Service;
 import javax.mail.MessagingException;
 import java.time.DayOfWeek;
 import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -52,15 +51,9 @@ public class TarefaService {
 
 
     public void criarTarefa(TarefaDTO tarefaRequestDto) throws MessagingException {
+
+        List<Usuario> listaResponsavel = obterListaResponsavel(tarefaRequestDto.getIdResponsavel());
         Tarefa tarefa = fromDto(tarefaRequestDto);
-        List<Usuario> listaResponsavel = new ArrayList<>();
-        for (Long idResponsavel : tarefaRequestDto.getIdResponsavel()) {
-            Usuario responsavel = usuarioRepository.findById(idResponsavel)
-                    .orElseThrow(() -> new UsuarioNaoEncontradoException("Usuário " + idResponsavel + " não econtrado!"));
-            //usuarioService.verificaQuantidadeDeTarefasParaUsuario(responsavel);
-            responsavel.getTarefa().add(tarefa);
-            listaResponsavel.add(responsavel);
-        }
         if (listaResponsavel.size() > QUANTIDADE_USUARIOS_PERMITIDOS) {
             throw new TarefaException("A tarefa só pode ter até 4 responsáveis!");
         }
@@ -91,19 +84,12 @@ public class TarefaService {
         repository.deleteById(tarefaId);
     }
 
-    public Tarefa atualizarTarefa(Long id, TarefaUpdateRequestDTO tarefaDTO) {
+    public TarefaResponseDTO atualizarTarefa(Long id, TarefaUpdateRequestDTO tarefaDTO) {
         return repository.findById(id).map(tarefa -> {
             if (tarefa.getStatus().equals(StatusTarefa.CONCLUIDA)) {
                 throw new TarefaException("Impossível atualizar tarefas já CONCLUÍDAS!");
             }
-            List<Usuario> listaResponsavel = new ArrayList<>();
-            for (Long idResponsavel : tarefaDTO.getIdResponsavel()) {
-                Usuario responsavel = usuarioRepository.findById(idResponsavel)
-                        .orElseThrow(() -> new UsuarioNaoEncontradoException("Usuário " + idResponsavel + " não econtrado!"));
-                //usuarioService.verificaQuantidadeDeTarefasParaUsuario(responsavel);
-                responsavel.getTarefa().add(tarefa);
-                listaResponsavel.add(responsavel);
-            }
+            List<Usuario> listaResponsavel = obterListaResponsavel(tarefaDTO.getIdResponsavel());
 
             String novoTitulo = tarefaDTO.getTitulo().isEmpty() ? tarefa.getTitulo() : tarefaDTO.getTitulo();
             String novaDescricao = tarefaDTO.getDescricao().isEmpty() ? tarefa.getDescricao() : tarefaDTO.getDescricao();
@@ -118,7 +104,8 @@ public class TarefaService {
             tarefa.setDataUltimaAtualizacao(LocalDate.now());
             tarefa.setUsuarioAtualizacao(usuarioAtualizacao);
             verificarData(tarefa);
-            return repository.save(tarefa);
+            repository.save(tarefa);
+            return modelMapper.map(tarefa, TarefaResponseDTO.class);
         }).orElseThrow(() -> new TarefaNaoEncontradaException("Tarefa não encontrada!"));
     }
 
@@ -237,6 +224,13 @@ public class TarefaService {
         TarefaResponseDTO tarefaResponseDTO = modelMapper.map(tarefa, TarefaResponseDTO.class);
         tarefaResponseDTO.setResponsavel(listaResponsavel);
         return tarefaResponseDTO;
+    }
+
+    private List<Usuario> obterListaResponsavel(List<Long> idResponsavel) {
+        return idResponsavel.stream()
+                .map(id -> usuarioRepository.findById(id)
+                        .orElseThrow(() -> new UsuarioNaoEncontradoException("Usuário " + id + " não encontrado!")))
+                .collect(Collectors.toList());
     }
 
 
