@@ -100,7 +100,7 @@ public class TarefaService {
             for (Long idResponsavel : tarefaDTO.getIdResponsavel()) {
                 Usuario responsavel = usuarioRepository.findById(idResponsavel)
                         .orElseThrow(() -> new UsuarioNaoEncontradoException("Usuário " + idResponsavel + " não econtrado!"));
-                userService.verificaQuantidadeDeTarefasParaUsuario(responsavel);
+                //usuarioService.verificaQuantidadeDeTarefasParaUsuario(responsavel);
                 responsavel.getTarefa().add(tarefa);
                 listaResponsavel.add(responsavel);
             }
@@ -109,10 +109,14 @@ public class TarefaService {
             String novaDescricao = tarefaDTO.getDescricao().isEmpty() ? tarefa.getDescricao() : tarefaDTO.getDescricao();
             LocalDate novaDataPrevistaConclusao = tarefaDTO.getDataPrevistaConclusao() == null ? tarefa.getDataPrevistaConclusao() : tarefaDTO.getDataPrevistaConclusao();
 
+            String usuarioAtualizacao = usuarioService.retornarNomeOrganizador();
+
             tarefa.setTitulo(novoTitulo);
             tarefa.setDescricao(novaDescricao);
             tarefa.setDataPrevistaConclusao(novaDataPrevistaConclusao);
             tarefa.setResponsavel(listaResponsavel);
+            tarefa.setDataUltimaAtualizacao(LocalDate.now());
+            tarefa.setUsuarioAtualizacao(usuarioAtualizacao);
             verificarData(tarefa);
             return repository.save(tarefa);
         }).orElseThrow(() -> new TarefaNaoEncontradaException("Tarefa não encontrada!"));

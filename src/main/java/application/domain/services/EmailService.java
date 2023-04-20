@@ -160,7 +160,8 @@ public class EmailService {
                     " Status da tarefa: " + tarefa.getStatus().toString() + " \n\n" +
                     " Prioridade da tarefa: " + tarefa.getPrioridade().toString() + " \n\n" +
                     " Data da abertura da tarefa: " + tarefa.getDataAbertura().toString() + "\n\n" +
-                    " Data prevista para a conclusão da tarefa: " + tarefa.getDataPrevistaConclusao();
+                    " Data prevista para a conclusão da tarefa: " + tarefa.getDataPrevistaConclusao() + "\n\n" +
+                    "Organizador da tarefa: " + tarefa.getOrganizador();
         }
 
         if (tarefa.getStatus().equals(StatusTarefa.EM_ANDAMENTO)) {
@@ -170,7 +171,8 @@ public class EmailService {
                     " Status da tarefa: " + tarefa.getStatus().toString() + " \n\n" +
                     " Prioridade da tarefa: " + tarefa.getPrioridade().toString() + " \n\n" +
                     " Data da abertura da tarefa: " + tarefa.getDataAbertura().toString() + "\n\n" +
-                    " Data prevista para a conclusão da tarefa: " + tarefa.getDataPrevistaConclusao();
+                    " Data prevista para a conclusão da tarefa: " + tarefa.getDataPrevistaConclusao() + "\n\n" +
+                    "Organizador da tarefa: " + tarefa.getOrganizador();
         }
 
         if (tarefa.getStatus().equals(StatusTarefa.CONCLUIDA)) {
@@ -181,7 +183,8 @@ public class EmailService {
                     " Prioridade da tarefa: " + tarefa.getPrioridade().toString() + " \n\n" +
                     " Data da abertura da tarefa: " + tarefa.getDataAbertura().toString() + "\n\n" +
                     " Data prevista para a conclusão da tarefa: " + tarefa.getDataPrevistaConclusao() + "\n\n" +
-                    " Data de conclusão da tarefa: " + tarefa.getDataConclusao().toString();
+                    " Data de conclusão da tarefa: " + tarefa.getDataConclusao().toString() + "\n\n" +
+                    "Organizador da tarefa: " + tarefa.getOrganizador();
         }
         return mensagem;
     }

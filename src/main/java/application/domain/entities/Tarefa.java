@@ -3,7 +3,6 @@ package application.domain.entities;
 import application.domain.enumeration.PrioridadeEnum;
 import application.domain.enumeration.StatusTarefa;
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -52,7 +51,6 @@ public class Tarefa {
     private StatusTarefa status;
 
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy", locale = "pt-BR", timezone = "Brazil/East")
-    @JsonInclude(JsonInclude.Include.NON_NULL)
     @Column(name = "tb_data_conclusao_tarefa")
     private LocalDate dataConclusao;
 
@@ -60,5 +58,13 @@ public class Tarefa {
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy", locale = "pt-BR", timezone = "Brazil/East")
     private LocalDate dataPrevistaConclusao;
 
+    @Column(name = "tb_organizador")
+    private String organizador;
+
+    @Column(name = "tb_data_ultima_atualizacao")
+    private LocalDate dataUltimaAtualizacao;
+
+    @Column(name = "tb_usuario_atualizacao")
+    private String usuarioAtualizacao;
 
 }

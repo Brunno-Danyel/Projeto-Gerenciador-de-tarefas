@@ -39,4 +39,12 @@ public class TarefaResponseDTO {
 
 
     private StatusTarefa status;
+
+    private String organizador;
+
+    @JsonInclude(JsonInclude.Include.NON_NULL)
+    private LocalDate dataUltimaAtualizacao;
+
+    @JsonInclude(JsonInclude.Include.NON_NULL)
+    private String usuarioAtualizacao;
 }
