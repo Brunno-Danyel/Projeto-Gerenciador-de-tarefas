@@ -20,4 +20,10 @@ public class EmailController {
     private void envioDeEmailUnitario(@RequestBody EnvioDeEmail envioDeEmail) throws MessagingException {
         emailService.envioDeEmailUnitario(envioDeEmail);
     }
+
+    @PostMapping("/{tarefaId}")
+    @ResponseStatus(HttpStatus.OK)
+    private void enviarTarefaParaTodos(@PathVariable Long tarefaId) throws MessagingException {
+        emailService.enviarTarefaParaTodos(tarefaId);
+    }
 }

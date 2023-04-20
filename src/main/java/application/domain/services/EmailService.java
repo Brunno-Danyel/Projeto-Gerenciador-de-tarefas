@@ -120,6 +120,36 @@ public class EmailService {
         javaMailSender.send(email);
     }
 
+    public void enviarTarefaParaTodos(Long tarefaId) throws MessagingException {
+
+        Tarefa tarefa = tarefaRepository.findById(tarefaId).orElseThrow(() -> new TarefaNaoEncontradaException("Tarefa não encontrada!"));
+
+        List<Usuario> listaUsuarios = usuarioService.listarUsuarios();
+
+        MimeMessage email = javaMailSender.createMimeMessage();
+
+        MimeMessageHelper helper = new MimeMessageHelper(email, true);
+
+        helper.setFrom(remetente);
+        helper.setSubject("Envio de tarefa!");
+        helper.setText(corpoMessagem(tarefa));
+        for (Usuario usuario : listaUsuarios)
+            helper.addTo(usuario.getLogin());
+
+        if (tarefa.getStatus().equals(StatusTarefa.CONCLUIDA)) {
+            helper.addAttachment("narutoJoinha.jpg", new ClassPathResource("arquivos/narutoJoinha.jpg"));
+        }
+
+        if (tarefa.getStatus().equals(StatusTarefa.EM_ANDAMENTO)) {
+            helper.addAttachment("narutoSorrindo.jpg", new ClassPathResource("arquivos/narutoSorrindo.jpg"));
+        }
+
+        if (tarefa.getStatus().equals(StatusTarefa.ATRASADA)) {
+            helper.addAttachment("narutoChateado.jpg", new ClassPathResource("arquivos/narutoChateado.jpg"));
+        }
+        javaMailSender.send(email);
+    }
+
     public String corpoMessagem(Tarefa tarefa) {
         String mensagem = new String();
         if (tarefa.getStatus().equals(StatusTarefa.ATRASADA)) {
