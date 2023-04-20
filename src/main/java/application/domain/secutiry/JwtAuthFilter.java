@@ -1,6 +1,6 @@
 package application.domain.secutiry;
 
-import application.domain.services.UserService;
+import application.domain.services.UsuarioService;
 import lombok.AllArgsConstructor;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -19,7 +19,7 @@ public class JwtAuthFilter extends OncePerRequestFilter {
 
     private JwtService service;
 
-    private UserService userService;
+    private UsuarioService usuarioService;
 
     @Override
     protected void doFilterInternal(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, FilterChain filterChain) throws ServletException, IOException {
@@ -32,7 +32,7 @@ public class JwtAuthFilter extends OncePerRequestFilter {
 
             if (isValid) {
                 String loginUsuario = service.obterLogin(token);
-                UserDetails userDetails = userService.loadUserByUsername(loginUsuario);
+                UserDetails userDetails = usuarioService.loadUserByUsername(loginUsuario);
                 UsernamePasswordAuthenticationToken user = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
 
                 user.setDetails(new WebAuthenticationDetailsSource().buildDetails(httpServletRequest));

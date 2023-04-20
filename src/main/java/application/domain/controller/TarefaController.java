@@ -31,7 +31,7 @@ public class TarefaController {
     @PostMapping("/tarefa")
     @ResponseStatus(HttpStatus.CREATED)
     public void criarTarefa(@RequestBody @Valid TarefaDTO tarefaDto) throws MessagingException {
-         service.criarTarefa(tarefaDto);
+        service.criarTarefa(tarefaDto);
     }
 
     @PostMapping("/tarefa/todos")

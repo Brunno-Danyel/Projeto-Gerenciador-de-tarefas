@@ -6,7 +6,7 @@ import application.domain.dto.UsuarioDTO;
 import application.domain.entities.Usuario;
 import application.domain.exception.SenhaInvalidaException;
 import application.domain.secutiry.JwtService;
-import application.domain.services.UserService;
+import application.domain.services.UsuarioService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -25,7 +25,7 @@ import java.util.List;
 public class UsuarioController {
 
     private final PasswordEncoder encoder;
-    private final UserService service;
+    private final UsuarioService service;
     private final JwtService jwtService;
 
     @PostMapping

@@ -10,6 +10,8 @@ import application.domain.exception.UsuarioNaoEncontradoException;
 import application.domain.repositories.TarefaRepository;
 import application.domain.repositories.UsuarioRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -23,7 +25,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
-public class UserService implements UserDetailsService {
+public class UsuarioService implements UserDetailsService {
     public static final int QUANTIDADE_TAREFA = 3;
     @Autowired
     private UsuarioRepository repository;
@@ -97,6 +99,16 @@ public class UserService implements UserDetailsService {
         if (listaDeTarefasEmAndamento.size() > QUANTIDADE_TAREFA) {
             throw new UsuarioException("Usuário " + usuario.getNome() + " já tem o número máximo de tarefas em andamento!");
         }
+    }
+
+    public String retornarNomeOrganizador() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication == null || !authentication.isAuthenticated()) {
+            throw new IllegalStateException("Usuário não autenticado.");
+        }
+        String email = authentication.getName();
+        Usuario usuarioEmail = repository.findByLogin(email).orElseThrow(() -> new UsuarioNaoEncontradoException("Usuário não encontrado"));
+        return usuarioEmail.getNome();
     }
 
 }

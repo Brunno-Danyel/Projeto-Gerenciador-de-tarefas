@@ -24,7 +24,7 @@ public class EmailService {
     private JavaMailSender javaMailSender;
 
     @Autowired
-    private UserService userService;
+    private UsuarioService usuarioService;
 
     @Autowired
     private TarefaRepository tarefaRepository;
@@ -94,7 +94,7 @@ public class EmailService {
         Long idTarefa = envioDeEmail.getIdTarefa();
         Long idUsuario = envioDeEmail.getIdUsuario();
 
-        Usuario usuario = userService.buscarUsuarioPorId(idUsuario);
+        Usuario usuario = usuarioService.buscarUsuarioPorId(idUsuario);
         Tarefa tarefa = tarefaRepository.findById(idTarefa).orElseThrow(() -> new TarefaNaoEncontradaException("Tarefa ID:" + idTarefa + " não encontrada!"));
 
         MimeMessage email = javaMailSender.createMimeMessage();

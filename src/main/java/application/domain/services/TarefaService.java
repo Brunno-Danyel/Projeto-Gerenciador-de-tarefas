@@ -42,7 +42,7 @@ public class TarefaService {
     private UsuarioRepository usuarioRepository;
 
     @Autowired
-    private UserService userService;
+    private UsuarioService usuarioService;
 
     @Autowired
     private EmailService emailService;
@@ -50,19 +50,22 @@ public class TarefaService {
     @Autowired
     private ModelMapper modelMapper;
 
+
     public void criarTarefa(TarefaDTO tarefaRequestDto) throws MessagingException {
         Tarefa tarefa = fromDto(tarefaRequestDto);
         List<Usuario> listaResponsavel = new ArrayList<>();
         for (Long idResponsavel : tarefaRequestDto.getIdResponsavel()) {
             Usuario responsavel = usuarioRepository.findById(idResponsavel)
                     .orElseThrow(() -> new UsuarioNaoEncontradoException("Usuário " + idResponsavel + " não econtrado!"));
-            userService.verificaQuantidadeDeTarefasParaUsuario(responsavel);
+            //usuarioService.verificaQuantidadeDeTarefasParaUsuario(responsavel);
             responsavel.getTarefa().add(tarefa);
             listaResponsavel.add(responsavel);
         }
         if (listaResponsavel.size() > QUANTIDADE_USUARIOS_PERMITIDOS) {
             throw new TarefaException("A tarefa só pode ter até 4 responsáveis!");
         }
+        String organizador = usuarioService.retornarNomeOrganizador();
+        tarefa.setOrganizador(organizador);
         tarefa.setResponsavel(listaResponsavel);
         verificarData(tarefa);
         repository.save(tarefa);
