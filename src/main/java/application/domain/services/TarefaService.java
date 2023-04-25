@@ -67,6 +67,8 @@ public class TarefaService {
 
     public void cadastrarTarefaParaTodos(TarefaRequestDTO tarefaRequestDTO) throws MessagingException {
         Tarefa tarefa = requestDto(tarefaRequestDTO);
+        String organizador = usuarioService.retornarNomeOrganizador();
+        tarefa.setOrganizador(organizador);
         List<Usuario> responsaveis = usuarioRepository.findAll();
         tarefa.setResponsavel(responsaveis);
         repository.save(tarefa);
