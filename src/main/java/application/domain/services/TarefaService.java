@@ -96,13 +96,13 @@ public class TarefaService {
             String novoTitulo = tarefaDTO.getTitulo().isEmpty() ? tarefa.getTitulo() : tarefaDTO.getTitulo();
             String novaDescricao = tarefaDTO.getDescricao().isEmpty() ? tarefa.getDescricao() : tarefaDTO.getDescricao();
             LocalDate novaDataPrevistaConclusao = tarefaDTO.getDataPrevistaConclusao() == null ? tarefa.getDataPrevistaConclusao() : tarefaDTO.getDataPrevistaConclusao();
-
+            List<Usuario> novaListaUsuario = listaResponsavel.isEmpty() ? tarefa.getResponsavel() : listaResponsavel;
             String usuarioAtualizacao = usuarioService.retornarNomeOrganizador();
 
             tarefa.setTitulo(novoTitulo);
             tarefa.setDescricao(novaDescricao);
             tarefa.setDataPrevistaConclusao(novaDataPrevistaConclusao);
-            tarefa.setResponsavel(listaResponsavel);
+            tarefa.setResponsavel(novaListaUsuario);
             tarefa.setDataUltimaAtualizacao(LocalDate.now());
             tarefa.setUsuarioAtualizacao(usuarioAtualizacao);
             verificarData(tarefa);
