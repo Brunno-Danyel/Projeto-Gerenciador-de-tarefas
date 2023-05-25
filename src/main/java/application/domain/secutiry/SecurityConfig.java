@@ -61,6 +61,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers(HttpMethod.PUT, "/{tarefaId}/concluir").hasRole("USER")
                 .antMatchers(HttpMethod.PUT, "/api/usuarios/admin/{idUsuario}").hasRole("ADMIN")
                 .antMatchers(HttpMethod.POST, "/api/usuarios/**").permitAll()
+                .antMatchers("/swagger-ui.html", "/swagger-ui/**", "/v3/api-docs/**").permitAll()
                 .anyRequest().authenticated().and()
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and().addFilterBefore(jwtFilter(), UsernamePasswordAuthenticationFilter.class)
