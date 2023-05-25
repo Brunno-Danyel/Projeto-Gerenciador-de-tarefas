@@ -1,0 +1,36 @@
+version: '3.3'
+
+services:
+
+  db:
+    image: postgres
+    container_name: genrenciador-postgres
+    ports:
+      - "5433:5432"
+    environment:
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_USER: postgres
+      POSTGRES_DATABASE: gerenciador
+    restart: always
+    networks:
+      - workspace
+    expose:
+      - 5432
+
+  gerenciador-api:
+    build:
+      dockerfile: Dockerfile
+    container_name: gerenciador-api
+    restart: on-failure
+    ports:
+      - "9091:9090"
+    expose:
+      - 9090
+    networks:
+      - workspace
+    depends_on:
+      - db
+
+networks:
+  workspace:
+    driver: bridge
